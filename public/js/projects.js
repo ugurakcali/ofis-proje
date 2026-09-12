@@ -416,14 +416,12 @@ function createRuhsatProject(metadata, customTemplate) {
 
         function createNewProject(type, category = 'genel') {
             if (type === 'full' && category !== 'ofis') {
-                const adaParsel = prompt("Yeni Ruhsat / İmar Projesinin Ada/Parsel Bilgisi (Örn: 102 / 5):", "101 / 5");
-                if (adaParsel === null) return;
-                const projeAdi = prompt("Proje Adı veya Sahibi (İsteğe bağlı):", "Yeni Mimari Proje");
-                if (projeAdi === null) return;
+                const name = prompt("Yeni Ruhsat / İmar Projesinin Ada/Parsel Bilgisini Giriniz:", "Yeni Ada/Parsel");
+                if (name === null) return;
                 recordState();
                 const newProj = createRuhsatProject({
-                    projeAdi: (projeAdi || '').trim(),
-                    adaParsel: (adaParsel || '').trim(),
+                    projeAdi: "",
+                    adaParsel: (name || 'Yeni Ada/Parsel').trim(),
                     tarih: new Date().toLocaleDateString('tr-TR'),
                     mimar: ""
                 });
@@ -432,7 +430,7 @@ function createRuhsatProject(metadata, customTemplate) {
                 saveProjects();
                 renderProjects();
                 openModal(newProj.id);
-                showToast("Yeni 131 maddelik Ruhsat / İmar Kontrol Föyü oluşturuldu.");
+                showToast("131 maddelik Ruhsat / İmar Kontrol Föyü oluşturuldu.");
                 return;
             }
 
@@ -463,12 +461,24 @@ function createRuhsatProject(metadata, customTemplate) {
             document.getElementById('modal-title').value = project.title;
             document.getElementById('modal-folder').value = project.folder || '';
             const modalContent = document.getElementById('modal-content');
-            if (project.color) {
-                modalContent.style.backgroundColor = project.color;
-                modalContent.style.color = getContrastColor(project.color);
-            } else {
+            
+            const sortBar = document.querySelector('.task-sort-bar');
+            const newTaskContainer = document.querySelector('.new-task-container');
+            if (project.isRuhsat) {
+                if (sortBar) sortBar.style.display = 'none';
+                if (newTaskContainer) newTaskContainer.style.display = 'none';
                 modalContent.style.removeProperty('background-color');
                 modalContent.style.removeProperty('color');
+            } else {
+                if (sortBar) sortBar.style.display = 'flex';
+                if (newTaskContainer) newTaskContainer.style.display = 'flex';
+                if (project.color) {
+                    modalContent.style.backgroundColor = project.color;
+                    modalContent.style.color = getContrastColor(project.color);
+                } else {
+                    modalContent.style.removeProperty('background-color');
+                    modalContent.style.removeProperty('color');
+                }
             }
             document.getElementById('modal-overlay').style.display = 'flex';
             renderTasks();
