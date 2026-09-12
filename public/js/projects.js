@@ -822,8 +822,8 @@ function initProjects() {
         }
 
         /* ===== KART 3 NOKTA MENÜSÜ (KLASÖRE TAŞI / ANA EKRAN / ARŞİV / SİL) ===== */
-        let cardMenuTargetType = null;
-        let cardMenuTargetId = null;
+        var cardMenuTargetType = null;
+        var cardMenuTargetId = null;
 
         function getAllKnownFolders() {
             const set = new Set();
@@ -1004,9 +1004,9 @@ function initProjects() {
 
 
         /* ===== RUHSAT & İMAR FÖYÜ (131 MADDE & 12 BÖLÜM) ÖZEL YÖNETİMİ ===== */
-        let ruhsatSearchQuery = '';
-        let ruhsatActiveFilter = 'all'; // 'all', 'incomplete', 'completed'
-        let ruhsatCollapsedSections = new Set();
+        var ruhsatSearchQuery = '';
+        var ruhsatActiveFilter = 'all'; // 'all', 'incomplete', 'completed'
+        var ruhsatCollapsedSections = new Set();
 
         function escapeHtml(text) {
             if (!text && text !== 0) return '';
