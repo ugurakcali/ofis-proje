@@ -1,0 +1,54 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "Örnek Ruhsat / İmar Föyü",
+      "folder": "Ana Ekran",
+      "color": "#85b88f",
+      "isArchived": false,
+      "isPinned": false,
+      "createdAt": "12.09.2026 13:52",
+      "tasks": [
+        {
+          "id": 1,
+          "text": "KAT PLANLARINA SIVALAR",
+          "completed": false,
+          "subtasks": [
+            { "id": 11, "text": "1. Kat", "completed": false },
+            { "id": 12, "text": "Zemin Kat", "completed": false },
+            { "id": 13, "text": "Bodrum", "completed": false }
+          ]
+        },
+        {
+          "id": 2,
+          "text": "KESİT AKSLARI EKLENECEK",
+          "completed": false,
+          "subtasks": []
+        },
+        {
+          "id": 3,
+          "text": "KESİT ÖLÇÜLER",
+          "completed": false,
+          "subtasks": [
+            { "id": 31, "text": "A-A Kesiti", "completed": false },
+            { "id": 32, "text": "B-B Kesiti", "completed": false }
+          ]
+        },
+        {
+          "id": 4,
+          "text": "YANGIN TAHLİYE PLANLARI",
+          "completed": false,
+          "subtasks": []
+        },
+        {
+          "id": 5,
+          "text": "ŞEMATİK KESİTLER",
+          "completed": false,
+          "subtasks": []
+        }
+      ]
+    }
+  ],
+  "officeNotes": [],
+  "lastUpdated": 1789210300000
+}
