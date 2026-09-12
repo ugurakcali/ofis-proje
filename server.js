@@ -17,30 +17,23 @@ if (!fs.existsSync(DATA_DIR)) {
 
 // Varsayılan başlangıç verisi
 function getDefaultData() {
+    try {
+        if (fs.existsSync(DB_FILE)) {
+            const raw = fs.readFileSync(DB_FILE, 'utf8');
+            const parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.projects) && parsed.projects.length > 0) {
+                return parsed;
+            }
+        }
+    } catch (e) {}
+
     const formattedDate = new Date().toLocaleString('tr-TR', {
         day: '2-digit', month: '2-digit', year: 'numeric',
         hour: '2-digit', minute: '2-digit'
     });
 
     return {
-        projects: [
-            {
-                id: Date.now(),
-                title: "Örnek Ruhsat / İmar Föyü",
-                folder: "Ana Ekran",
-                color: '#85b88f',
-                isArchived: false,
-                isPinned: false,
-                createdAt: formattedDate,
-                tasks: [
-                    { id: 1, text: "KAT PLANLARINA SIVALAR", completed: false, subtasks: [{ id: 11, text: "1. Kat", completed: false }, { id: 12, text: "Zemin Kat", completed: false }, { id: 13, text: "Bodrum", completed: false }] },
-                    { id: 2, text: "KESİT AKSLARI EKLENECEK", completed: false, subtasks: [] },
-                    { id: 3, text: "KESİT ÖLÇÜLER", completed: false, subtasks: [{ id: 31, text: "A-A Kesiti", completed: false }, { id: 32, text: "B-B Kesiti", completed: false }] },
-                    { id: 4, text: "YANGIN TAHLİYE PLANLARI", completed: false, subtasks: [] },
-                    { id: 5, text: "ŞEMATİK KESİTLER", completed: false, subtasks: [] }
-                ]
-            }
-        ],
+        projects: [],
         officeNotes: [],
         lastUpdated: Date.now()
     };

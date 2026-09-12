@@ -2,53 +2,1168 @@
   "projects": [
     {
       "id": 1,
-      "title": "Örnek Ruhsat / İmar Föyü",
+      "title": "101 / 5 - Örnek Proje",
       "folder": "Ana Ekran",
-      "color": "#85b88f",
+      "color": "#4a544e",
       "isArchived": false,
       "isPinned": false,
+      "isRuhsat": true,
+      "category": "genel",
+      "metadata": {
+        "projeAdi": "Örnek Proje",
+        "adaParsel": "101 / 5",
+        "tarih": "08/07/2026",
+        "mimar": "Ahmet Yılmaz"
+      },
       "createdAt": "12.09.2026 13:52",
       "tasks": [
         {
           "id": 1,
-          "text": "KAT PLANLARINA SIVALAR",
+          "sectionKey": "A",
+          "text": "A. GEREKEN EVRAKLAR (Kapaklı Dosya İçerisinde)",
           "completed": false,
           "subtasks": [
-            { "id": 11, "text": "1. Kat", "completed": false },
-            { "id": 12, "text": "Zemin Kat", "completed": false },
-            { "id": 13, "text": "Bodrum", "completed": false }
+            {
+              "id": 1001,
+              "no": "1",
+              "desc": "Önonay Dilekçesi",
+              "text": "1. Önonay Dilekçesi",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 1002,
+              "no": "2",
+              "desc": "İmar Durum Belgesi (Plan notları ve şema olan yerlerde ölçüleri bulunan)",
+              "text": "2. İmar Durum Belgesi (Plan notları ve şema olan yerlerde ölçüleri bulunan)",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 1003,
+              "no": "3",
+              "desc": "Fen İşleri Müdürlüğü'nden alınmış onaylı Yol Kotu Tutanağı",
+              "text": "3. Fen İşleri Müdürlüğü'nden alınmış onaylı Yol Kotu Tutanağı",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 1004,
+              "no": "4",
+              "desc": "Tapu Kayıt Sureti (Son 1 aylık)",
+              "text": "4. Tapu Kayıt Sureti (Son 1 aylık)",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 1005,
+              "no": "5",
+              "desc": "Aplikasyon Krokisi",
+              "text": "5. Aplikasyon Krokisi",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 1006,
+              "no": "6",
+              "desc": "Onaylı Plankote (Çevreleyen parseller ve yol kotu tutanağı ile irtibatlı)",
+              "text": "6. Onaylı Plankote (Çevreleyen parseller ve yol kotu tutanağı ile irtibatlı)",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 1007,
+              "no": "7",
+              "desc": "Ölçü Krokisi",
+              "text": "7. Ölçü Krokisi",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 1008,
+              "no": "8",
+              "desc": "Numarataj Krokisi",
+              "text": "8. Numarataj Krokisi",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 1009,
+              "no": "9",
+              "desc": "Paylaşım Krokili Kat Karşılığı İnşaat Sözleşmesi",
+              "text": "9. Paylaşım Krokili Kat Karşılığı İnşaat Sözleşmesi",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 1010,
+              "no": "10",
+              "desc": "Mimari Proje CD'si (DWG veya DXF formatında)",
+              "text": "10. Mimari Proje CD'si (DWG veya DXF formatında)",
+              "note": "",
+              "completed": false
+            }
           ]
         },
         {
           "id": 2,
-          "text": "KESİT AKSLARI EKLENECEK",
+          "sectionKey": "B",
+          "text": "B. MİMARİ PROJE PAFTA DÜZENİ",
           "completed": false,
-          "subtasks": []
+          "subtasks": [
+            {
+              "id": 2001,
+              "no": "1",
+              "desc": "Tüm bilgilerin yer aldığı proje kapağı hazırlanmalıdır.",
+              "text": "1. Tüm bilgilerin yer aldığı proje kapağı hazırlanmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2002,
+              "no": "2",
+              "desc": "İtfaiye onayı için ayrılmış alan paftada bulunmalıdır.",
+              "text": "2. İtfaiye onayı için ayrılmış alan paftada bulunmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2003,
+              "no": "3",
+              "desc": "İmar durum belgesi paftaya işlenmelidir.",
+              "text": "3. İmar durum belgesi paftaya işlenmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2004,
+              "no": "4",
+              "desc": "Numarataj bilgisi / krokisi eklenmelidir.",
+              "text": "4. Numarataj bilgisi / krokisi eklenmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2005,
+              "no": "5",
+              "desc": "Yol kotu tutanağı (Fen İşleri Müdürlüğü onaylı) paftada yer almalıdır.",
+              "text": "5. Yol kotu tutanağı (Fen İşleri Müdürlüğü onaylı) paftada yer almalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2006,
+              "no": "6",
+              "desc": "Liste beyanı bulunmalıdır.",
+              "text": "6. Liste beyanı bulunmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2007,
+              "no": "7",
+              "desc": "Bağımsız Bölüm net m² ve brüt m² tabloları eksiksiz eklenmelidir.",
+              "text": "7. Bağımsız Bölüm net m² ve brüt m² tabloları eksiksiz eklenmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2008,
+              "no": "8",
+              "desc": "Belediye hesapları için ayrılmış alan bırakılmalıdır.",
+              "text": "8. Belediye hesapları için ayrılmış alan bırakılmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2009,
+              "no": "9",
+              "desc": "Otopark hesabı tablosu ve detayları yer almalıdır.",
+              "text": "9. Otopark hesabı tablosu ve detayları yer almalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2010,
+              "no": "10",
+              "desc": "Ağaç hesabı yapılmalı ve paftada gösterilmelidir.",
+              "text": "10. Ağaç hesabı yapılmalı ve paftada gösterilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 2011,
+              "no": "11",
+              "desc": "TAKS / KAKS (Emsal) alanı ve Sığınak hesabı net şekilde gösterilmelidir.",
+              "text": "11. TAKS / KAKS (Emsal) alanı ve Sığınak hesabı net şekilde gösterilmelidir.",
+              "note": "",
+              "completed": false
+            }
+          ]
         },
         {
           "id": 3,
-          "text": "KESİT ÖLÇÜLER",
+          "sectionKey": "C",
+          "text": "C. 1. VAZİYET PLANI (1/200)",
           "completed": false,
           "subtasks": [
-            { "id": 31, "text": "A-A Kesiti", "completed": false },
-            { "id": 32, "text": "B-B Kesiti", "completed": false }
+            {
+              "id": 3001,
+              "no": "1",
+              "desc": "Kuzey işareti net olarak gösterilecektir.",
+              "text": "1. Kuzey işareti net olarak gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3002,
+              "no": "2",
+              "desc": "Tabii zemin kotları, bitmiş zemin kotları ile çatı saçağı ve mahyası üzerine kotlar yazılacaktır.",
+              "text": "2. Tabii zemin kotları, bitmiş zemin kotları ile çatı saçağı ve mahyası üzerine kotlar yazılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3003,
+              "no": "3",
+              "desc": "Vaziyet planında kesinlikle ölçü verilmeyecektir (Kural kontrolü).",
+              "text": "3. Vaziyet planında kesinlikle ölçü verilmeyecektir (Kural kontrolü).",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3004,
+              "no": "4",
+              "desc": "Tasarlanan bina kütlesi dış konturlarıyla ve yerleşme planındaki konumuna uygun olarak gösterilecektir.",
+              "text": "4. Tasarlanan bina kütlesi dış konturlarıyla ve yerleşme planındaki konumuna uygun olarak gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3005,
+              "no": "5",
+              "desc": "Yaya ve taşıt giriş çıkışları, ulaşım aksları, yollar, komşu parseller, yangın tahliye sistemleri, bina giriş çıkışları işlenecektir.",
+              "text": "5. Yaya ve taşıt giriş çıkışları, ulaşım aksları, yollar, komşu parseller, yangın tahliye sistemleri, bina giriş çıkışları işlenecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3006,
+              "no": "6",
+              "desc": "Birden fazla blok var ise: Bloklara isim (A, B, C... harfleriyle) ve kot verilecek, blok giriş çıkışları belirtilecektir.",
+              "text": "6. Birden fazla blok var ise: Bloklara isim (A, B, C... harfleriyle) ve kot verilecek, blok giriş çıkışları belirtilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3007,
+              "no": "7",
+              "desc": "Otopark yönetmeliğine uygun olarak parsel içinde düzenlenen otopark yerleri çizilecektir.",
+              "text": "7. Otopark yönetmeliğine uygun olarak parsel içinde düzenlenen otopark yerleri çizilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3008,
+              "no": "8",
+              "desc": "Ağaçlar ve peyzaj / yeşil alanlar gösterilecektir.",
+              "text": "8. Ağaçlar ve peyzaj / yeşil alanlar gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3009,
+              "no": "9",
+              "desc": "Araç rampaları, bekçi/güvenlik kulübeleri, havuz, foseptik vb. (var ise) işlenecektir.",
+              "text": "9. Araç rampaları, bekçi/güvenlik kulübeleri, havuz, foseptik vb. (var ise) işlenecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3010,
+              "no": "10",
+              "desc": "Bahçe duvarı detayı (yol cephesinde max 0.50m) çizilecektir.",
+              "text": "10. Bahçe duvarı detayı (yol cephesinde max 0.50m) çizilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 3011,
+              "no": "11",
+              "desc": "Arazide 3 metreden fazla yapılan betonarme duvarlar 'İSTİNAT DUVARI' olarak tanımlanacak, uzunluk ve yüksekliği belirtilecek, ruhsata esas istinat duvarı projeleri hazırlanacaktır.",
+              "text": "11. Arazide 3 metreden fazla yapılan betonarme duvarlar 'İSTİNAT DUVARI' olarak tanımlanacak, uzunluk ve yüksekliği belirtilecek, ruhsata esas istinat duvarı projeleri hazırlanacaktır.",
+              "note": "",
+              "completed": false
+            }
           ]
         },
         {
           "id": 4,
-          "text": "YANGIN TAHLİYE PLANLARI",
+          "sectionKey": "D",
+          "text": "D. 2. YERLEŞİM PLANI (1/200)",
           "completed": false,
-          "subtasks": []
+          "subtasks": [
+            {
+              "id": 4001,
+              "no": "1",
+              "desc": "Kuzey işareti gösterilecektir.",
+              "text": "1. Kuzey işareti gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 4002,
+              "no": "2",
+              "desc": "Arazide önemli noktalarda kotlar gösterilecektir.",
+              "text": "2. Arazide önemli noktalarda kotlar gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 4003,
+              "no": "3",
+              "desc": "Yapının (havuz, su deposu, sığınak, otopark vb. dahil) arazi üzerindeki konumu, köşe noktalarının araziye dik ve arazi köşelerine ölçüleri, zemin kat izdüşümü dışında kalan bodrum katları ve üst kat çıkma mesafeleri nokta nokta gösterilecektir. (20cm motif ve yangın merdiveni yapı yaklaşma sınırını hiçbir şekilde geçemez!)",
+              "text": "3. Yapının (havuz, su deposu, sığınak, otopark vb. dahil) arazi üzerindeki konumu, köşe noktalarının araziye dik ve arazi köşelerine ölçüleri, zemin kat izdüşümü dışında kalan bodrum katları ve üst kat çıkma mesafeleri nokta nokta gösterilecektir. (20cm motif ve yangın merdiveni yapı yaklaşma sınırını hiçbir şekilde geçemez!)",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 4004,
+              "no": "4",
+              "desc": "Geçici-Madde 3: Teşekkülât kullanılması durumunda sağındaki veya solundaki parselde bulunan yapıların yerleşimi ve çıkmaları nokta nokta gösterilecektir.",
+              "text": "4. Geçici-Madde 3: Teşekkülât kullanılması durumunda sağındaki veya solundaki parselde bulunan yapıların yerleşimi ve çıkmaları nokta nokta gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 4005,
+              "no": "5",
+              "desc": "Parsel içinde düzenlenen otopark yerleri belirtilecek ve ölçülendirilecektir. Varsa araç rampalarının eğimi, genişliği ve uzunluğu yazılacaktır.",
+              "text": "5. Parsel içinde düzenlenen otopark yerleri belirtilecek ve ölçülendirilecektir. Varsa araç rampalarının eğimi, genişliği ve uzunluğu yazılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 4006,
+              "no": "6",
+              "desc": "Binaların dış kontur ölçüleri yazılacaktır. Birden fazla blok varsa: Blok isimleri (A, B, C...), kat sayısı, saçak ve subasman kotları, giriş çıkışları yazılacaktır.",
+              "text": "6. Binaların dış kontur ölçüleri yazılacaktır. Birden fazla blok varsa: Blok isimleri (A, B, C...), kat sayısı, saçak ve subasman kotları, giriş çıkışları yazılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 4007,
+              "no": "7",
+              "desc": "Binanın parsel sınırlarına kadar iki kesit silüeti çizilecektir (Arazinin topoğrafik yapısını ve binaların kotlandırıldığını gösteren).",
+              "text": "7. Binanın parsel sınırlarına kadar iki kesit silüeti çizilecektir (Arazinin topoğrafik yapısını ve binaların kotlandırıldığını gösteren).",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 4008,
+              "no": "8",
+              "desc": "Arazide 3 metreden fazla yapılan betonarme duvarlar İSTİNAT DUVARI olarak tanımlanacak, uzunluğu ve yüksekliği belirtilecektir.",
+              "text": "8. Arazide 3 metreden fazla yapılan betonarme duvarlar İSTİNAT DUVARI olarak tanımlanacak, uzunluğu ve yüksekliği belirtilecektir.",
+              "note": "",
+              "completed": false
+            }
+          ]
         },
         {
           "id": 5,
-          "text": "ŞEMATİK KESİTLER",
+          "sectionKey": "E",
+          "text": "E. 3. HAFRİYAT PLANI (1/200)",
           "completed": false,
-          "subtasks": []
+          "subtasks": [
+            {
+              "id": 5001,
+              "no": "1",
+              "desc": "Projeye göre tesviye edilen arazinin kazı ve dolgu alanlarını gösteren plan olacaktır. Bina konturu ve dışındaki çalışma alanlarının ölçüleri ve kotları yazılacaktır.",
+              "text": "1. Projeye göre tesviye edilen arazinin kazı ve dolgu alanlarını gösteren plan olacaktır. Bina konturu ve dışındaki çalışma alanlarının ölçüleri ve kotları yazılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 5002,
+              "no": "2",
+              "desc": "Hafriyard / kazı ve dolgu alanları ile hacimleri hesaplanacak, toprak hesabı paftada verilecektir.",
+              "text": "2. Hafriyard / kazı ve dolgu alanları ile hacimleri hesaplanacak, toprak hesabı paftada verilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 5003,
+              "no": "3",
+              "desc": "3 metreden yüksek betonarme istinat duvarları tanımlanacak, ölçülendirilecek ve ruhsata esas projeleri eklenecektir.",
+              "text": "3. 3 metreden yüksek betonarme istinat duvarları tanımlanacak, ölçülendirilecek ve ruhsata esas projeleri eklenecektir.",
+              "note": "",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "sectionKey": "F1",
+          "text": "F. PLANLAR (1/50) - 1. BODRUM KAT",
+          "completed": false,
+          "subtasks": [
+            {
+              "id": 6001,
+              "no": "1",
+              "desc": "Bina çekirdeğinin (ortak merdiven ve asansörün) tüm bodrum katlara ulaştırılması zorunludur.",
+              "text": "1. Bina çekirdeğinin (ortak merdiven ve asansörün) tüm bodrum katlara ulaştırılması zorunludur.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 6002,
+              "no": "2",
+              "desc": "Bodrum katta zemin kat izdüşümü gösterilmelidir. (Zemin kat izdüşümü dışında sığınak ve otopark gösterilebilir.)",
+              "text": "2. Bodrum katta zemin kat izdüşümü gösterilmelidir. (Zemin kat izdüşümü dışında sığınak ve otopark gösterilebilir.)",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 6003,
+              "no": "3",
+              "desc": "Varsa sığınak ihtiyacı yönetmeliğe uygun ayrılacak ve sığınak hesabı yapılacaktır.",
+              "text": "3. Varsa sığınak ihtiyacı yönetmeliğe uygun ayrılacak ve sığınak hesabı yapılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 6004,
+              "no": "4",
+              "desc": "Kuranglezler: Derinlik max 2.00m, genişlik min 0.80m - max 1.20m olacaktır. Binanın hiçbir cephesinde mütemadiyen tesis edilemez. Yapıldığı pencere genişliğini 0.50m'den fazla geçemez.",
+              "text": "4. Kuranglezler: Derinlik max 2.00m, genişlik min 0.80m - max 1.20m olacaktır. Binanın hiçbir cephesinde mütemadiyen tesis edilemez. Yapıldığı pencere genişliğini 0.50m'den fazla geçemez.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 6005,
+              "no": "5",
+              "desc": "Ticari alanlarda yapılan ve ticari olarak kullanılan bodrum katlara engelli erişimi zorunlu olarak sağlanacaktır.",
+              "text": "5. Ticari alanlarda yapılan ve ticari olarak kullanılan bodrum katlara engelli erişimi zorunlu olarak sağlanacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 6006,
+              "no": "6",
+              "desc": "Hidrofor ve su deposu: İçinde kolon vb. inşaat elemanları yapılamaz ve kesinlikle ıslak hacim altında konumlandırılamaz.",
+              "text": "6. Hidrofor ve su deposu: İçinde kolon vb. inşaat elemanları yapılamaz ve kesinlikle ıslak hacim altında konumlandırılamaz.",
+              "note": "",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "sectionKey": "F2",
+          "text": "F. PLANLAR (1/50) - 2. KAT PLANLARI",
+          "completed": false,
+          "subtasks": [
+            {
+              "id": 7001,
+              "no": "1",
+              "desc": "Bitişik binalarda dilatasyon derzleri her katta gösterilecektir (5 cm olacaktır).",
+              "text": "1. Bitişik binalarda dilatasyon derzleri her katta gösterilecektir (5 cm olacaktır).",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7002,
+              "no": "2",
+              "desc": "Engelli rampaları: Genişlik min 1.00m. Subasman kotu 0.50m olan yapılarda %7 eğim, 1.00m olanlarda %6 eğim. Yönetmeliğe uygun korkuluk. Engelli platformu: merdivene bitişik dar kenar min 0.90m, alan min 1.20m².",
+              "text": "2. Engelli rampaları: Genişlik min 1.00m. Subasman kotu 0.50m olan yapılarda %7 eğim, 1.00m olanlarda %6 eğim. Yönetmeliğe uygun korkuluk. Engelli platformu: merdivene bitişik dar kenar min 0.90m, alan min 1.20m².",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7003,
+              "no": "3",
+              "desc": "Bina Girişi ve Kapısı: Giriş koridoru genişliği ana merdiven/asansöre kadar min 1.50m (Umumi binalarda min 2.20m). Giriş saçağı işlenecek. Merdiven altı şakulü min 2.20m olacak.",
+              "text": "3. Bina Girişi ve Kapısı: Giriş koridoru genişliği ana merdiven/asansöre kadar min 1.50m (Umumi binalarda min 2.20m). Giriş saçağı işlenecek. Merdiven altı şakulü min 2.20m olacak.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7004,
+              "no": "4",
+              "desc": "Zemin katlarda üst kat çıkma izleri nokta nokta işlenecektir.",
+              "text": "4. Zemin katlarda üst kat çıkma izleri nokta nokta işlenecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7005,
+              "no": "5",
+              "desc": "Zemin Teraslar: Otopark olması durumunda arka bahçe sınırına max 5.00m, yan bahçe sınırına max 3.00m yaklaşabilir. Korkuluk yapılacaktır. Terasların üzeri kapalı olamaz.",
+              "text": "5. Zemin Teraslar: Otopark olması durumunda arka bahçe sınırına max 5.00m, yan bahçe sınırına max 3.00m yaklaşabilir. Korkuluk yapılacaktır. Terasların üzeri kapalı olamaz.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7006,
+              "no": "6",
+              "desc": "1. normal kat planında zemin kat izleri, çatı katı planında normal kat izleri nokta nokta işlenecektir.",
+              "text": "6. 1. normal kat planında zemin kat izleri, çatı katı planında normal kat izleri nokta nokta işlenecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7007,
+              "no": "7",
+              "desc": "Ortak merdiven kolu genişliği: Konutlarda min 1.20m, diğer yapılarda min 1.50m. Konut içi bağımsız bölüm merdivenleri min 1.00m (ahşap olamaz). Ortak merdiven tüm katlara ulaşmalıdır.",
+              "text": "7. Ortak merdiven kolu genişliği: Konutlarda min 1.20m, diğer yapılarda min 1.50m. Konut içi bağımsız bölüm merdivenleri min 1.00m (ahşap olamaz). Ortak merdiven tüm katlara ulaşmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7008,
+              "no": "8",
+              "desc": "Merdiven Rıht Yüksekliği: Asansörlü binalarda max 0.18m, asansörsüz binalarda max 0.16m olacaktır.",
+              "text": "8. Merdiven Rıht Yüksekliği: Asansörlü binalarda max 0.18m, asansörsüz binalarda max 0.16m olacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7009,
+              "no": "9",
+              "desc": "Merdiven basamak genişliği min 0.27m; balanslı merdivenlerde en dar kenar min 0.10m, basamak ortası min 0.27m olacaktır. Basamak uçları damlalıksız (çıkıntısız) olacaktır.",
+              "text": "9. Merdiven basamak genişliği min 0.27m; balanslı merdivenlerde en dar kenar min 0.10m, basamak ortası min 0.27m olacaktır. Basamak uçları damlalıksız (çıkıntısız) olacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7010,
+              "no": "10",
+              "desc": "Merdiven ölçüleri, basamak hesabı, merdiven ve sahanlık boyutları planlar üzerinde eksiksiz yazılacaktır.",
+              "text": "10. Merdiven ölçüleri, basamak hesabı, merdiven ve sahanlık boyutları planlar üzerinde eksiksiz yazılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7011,
+              "no": "11",
+              "desc": "Hava bacaları her türlü binada min 0.60m x 0.60m (0.36m²) olacaktır. Hiçbir yapı elemanı ile daraltılamaz.",
+              "text": "11. Hava bacaları her türlü binada min 0.60m x 0.60m (0.36m²) olacaktır. Hiçbir yapı elemanı ile daraltılamaz.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7012,
+              "no": "12",
+              "desc": "Işıklık ölçüleri: 1-6 katlı binalarda dar kenar min 1.50m, alan min 4.50m². 7 ve üzeri katlı binalarda dar kenar min 2.00m, alan min 9.00m² olacaktır.",
+              "text": "12. Işıklık ölçüleri: 1-6 katlı binalarda dar kenar min 1.50m, alan min 4.50m². 7 ve üzeri katlı binalarda dar kenar min 2.00m, alan min 9.00m² olacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7013,
+              "no": "13",
+              "desc": "Duman bacaları: Kaloriferli konutlarda 1 yaşam alanı ve mutfaklarda birer adet; umumi binalarda her bağımsız bölümde birer adet olacaktır.",
+              "text": "13. Duman bacaları: Kaloriferli konutlarda 1 yaşam alanı ve mutfaklarda birer adet; umumi binalarda her bağımsız bölümde birer adet olacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7014,
+              "no": "14",
+              "desc": "Kullanım net alanı 2000 m² ve üzerinde olan yapılarda merkezi ısıtma sistemi yapılacaktır.",
+              "text": "14. Kullanım net alanı 2000 m² ve üzerinde olan yapılarda merkezi ısıtma sistemi yapılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7015,
+              "no": "15",
+              "desc": "Asansör Zorunluluğu: İmar planında kat adedi 3 olan binalarda asansör boşluğu bırakılmalı, 4 ve üzeri olanlarda asansör tesis edilmelidir. Umumi binalarda katlar alanı >800m² ve kat >1 ise min 1 asansör zorunlukdur.",
+              "text": "15. Asansör Zorunluluğu: İmar planında kat adedi 3 olan binalarda asansör boşluğu bırakılmalı, 4 ve üzeri olanlarda asansör tesis edilmelidir. Umumi binalarda katlar alanı >800m² ve kat >1 ise min 1 asansör zorunlukdur.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7016,
+              "no": "16",
+              "desc": "Asansör Kabin ve Boşluk Ölçüleri: Kabin dar kenarı min 1.20m, alanı min 1.80m² olacak şekilde asansör boşluğu en az 2.00m x 2.10m olacaktır.",
+              "text": "16. Asansör Kabin ve Boşluk Ölçüleri: Kabin dar kenarı min 1.20m, alanı min 1.80m² olacak şekilde asansör boşluğu en az 2.00m x 2.10m olacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7017,
+              "no": "17",
+              "desc": "Yüksek Yapılarda Asansör: Saçak kotu 21.50m'yi geçince 2 asansör (biri min 2.00x2.10m, diğeri trafik hesabına göre min 1.60x1.60m). Saçak kotu 30.50m'de biri 2.00x2.10m, diğeri sedye asansörü (2.40x3.00m) olmalıdır. 10 kat ve üzeri binalarda en az biri dar kenar 1.20m, alan 2.52m², kapı net 1.10m olmalıdır.",
+              "text": "17. Yüksek Yapılarda Asansör: Saçak kotu 21.50m'yi geçince 2 asansör (biri min 2.00x2.10m, diğeri trafik hesabına göre min 1.60x1.60m). Saçak kotu 30.50m'de biri 2.00x2.10m, diğeri sedye asansörü (2.40x3.00m) olmalıdır. 10 kat ve üzeri binalarda en az biri dar kenar 1.20m, alan 2.52m², kapı net 1.10m olmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7018,
+              "no": "18",
+              "desc": "Asansör Sahanlık Genişliği: Sürgülü kapılarda en az 1.20m, dışa açılan kapılarda en az 1.50m olacaktır.",
+              "text": "18. Asansör Sahanlık Genişliği: Sürgülü kapılarda en az 1.20m, dışa açılan kapılarda en az 1.50m olacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7019,
+              "no": "19",
+              "desc": "Korkuluklar: Yükseklik min 1.10m olmalıdır. Can güvenliğini tehlikeye atmayan malzemeden yapılmalı, cam ise kırılmaz/dağılmaz olduğu projede belirtilmelidir.",
+              "text": "19. Korkuluklar: Yükseklik min 1.10m olmalıdır. Can güvenliğini tehlikeye atmayan malzemeden yapılmalı, cam ise kırılmaz/dağılmaz olduğu projede belirtilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7020,
+              "no": "20",
+              "desc": "Kapı Genişlikleri: Bina giriş kapıları min 1.50m, bağımsız bölüm giriş kapıları min 1.00m, mahal kapıları min 0.90m, balkon kapılarından en az 1 tanesi min 0.90m (tuvalet kapıları min 0.80m).",
+              "text": "20. Kapı Genişlikleri: Bina giriş kapıları min 1.50m, bağımsız bölüm giriş kapıları min 1.00m, mahal kapıları min 0.90m, balkon kapılarından en az 1 tanesi min 0.90m (tuvalet kapıları min 0.80m).",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7021,
+              "no": "21",
+              "desc": "Kapalı Çıkmalar: Yol cephelerinde parsel sınırında kalmak ve yapı yaklaşma sınırından itibaren max 1.50m taşmak kaydıyla yapılabilir. Arka/yan bahçelerde parsel sınırına 3.00m'den fazla yaklaşmamak kaydıyla max 1.50m yapılabilir.",
+              "text": "21. Kapalı Çıkmalar: Yol cephelerinde parsel sınırında kalmak ve yapı yaklaşma sınırından itibaren max 1.50m taşmak kaydıyla yapılabilir. Arka/yan bahçelerde parsel sınırına 3.00m'den fazla yaklaşmamak kaydıyla max 1.50m yapılabilir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7022,
+              "no": "22",
+              "desc": "Açık Çıkmalar (Balkonlar): Yol cephesinde max 1.50m taşabilir. Arka ve yan bahçelerde parsel sınırına 3.00m'den fazla yaklaşmamak kaydıyla max 1.50m taşabilir.",
+              "text": "22. Açık Çıkmalar (Balkonlar): Yol cephesinde max 1.50m taşabilir. Arka ve yan bahçelerde parsel sınırına 3.00m'den fazla yaklaşmamak kaydıyla max 1.50m taşabilir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7023,
+              "no": "23",
+              "desc": "Güneş Kırıcılar: Cephe estetiği göz önüne alınarak, hafif malzemeden, parsel sınırını taşmadan, kapalı mekân oluşturmadan max 0.50m'ye kadar yapılabilir.",
+              "text": "23. Güneş Kırıcılar: Cephe estetiği göz önüne alınarak, hafif malzemeden, parsel sınırını taşmadan, kapalı mekân oluşturmadan max 0.50m'ye kadar yapılabilir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7024,
+              "no": "24",
+              "desc": "Kapıcı Dairesi Zorunluluğu: Katı yakıtlı konutlarda >40 dairede 1 adet, >80 dairede 2 adet. Diğer ısıtma sistemlerinde >60 dairede 1 adet, >150 dairede 2 adet.",
+              "text": "24. Kapıcı Dairesi Zorunluluğu: Katı yakıtlı konutlarda >40 dairede 1 adet, >80 dairede 2 adet. Diğer ısıtma sistemlerinde >60 dairede 1 adet, >150 dairede 2 adet.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7025,
+              "no": "25",
+              "desc": "Kapıcı Dairesi Ölçüleri: En az brüt 50m² olacaktır. 2 yatak odası, 1 oturma odası, mutfak ve banyo bulunacaktır.",
+              "text": "25. Kapıcı Dairesi Ölçüleri: En az brüt 50m² olacaktır. 2 yatak odası, 1 oturma odası, mutfak ve banyo bulunacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7026,
+              "no": "26",
+              "desc": "Bekçi Odası ve Kontrol Kulübesi: İnşaat alanı >2000m² işyeri/bürolarda bekçi odası zorunludur.",
+              "text": "26. Bekçi Odası ve Kontrol Kulübesi: İnşaat alanı >2000m² işyeri/bürolarda bekçi odası zorunludur.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7027,
+              "no": "27",
+              "desc": "PAİ̇Y Madde 29 Minimum Piyes Ölçüleri Kontrolü (Oda: 12m², Yatak O.: 9m², Mutfak: 3.3m², Banyo: 3m², WC: 1.2m²)",
+              "text": "27. PAİ̇Y Madde 29 Minimum Piyes Ölçüleri Kontrolü (Oda: 12m², Yatak O.: 9m², Mutfak: 3.3m², Banyo: 3m², WC: 1.2m²)",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7028,
+              "no": "28",
+              "desc": "Her kat planında kesit geçirilen yerlerden kesit çizgisi ve bakış yönü gösterilecektir.",
+              "text": "28. Her kat planında kesit geçirilen yerlerden kesit çizgisi ve bakış yönü gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7029,
+              "no": "29",
+              "desc": "Her mahallin içine, mahal ismi ve net m² alanı açıkça yazılacaktır.",
+              "text": "29. Her mahallin içine, mahal ismi ve net m² alanı açıkça yazılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7030,
+              "no": "30",
+              "desc": "Projeye uygun harf ve sayılarla eksiksiz bir aks sistemi oluşturulacaktır.",
+              "text": "30. Projeye uygun harf ve sayılarla eksiksiz bir aks sistemi oluşturulacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7031,
+              "no": "31",
+              "desc": "İnşai elemanlar (kolon, perde, duvar) ayrı taranacak veya koyulaştırılacaktır.",
+              "text": "31. İnşai elemanlar (kolon, perde, duvar) ayrı taranacak veya koyulaştırılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7032,
+              "no": "32",
+              "desc": "Çamaşır/bulaşık makinesi, kombi vb. cihaz yerleri planlarda gösterilecektir.",
+              "text": "32. Çamaşır/bulaşık makinesi, kombi vb. cihaz yerleri planlarda gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7033,
+              "no": "33",
+              "desc": "Islak hacimler tefriş edilecek, süzgeç yerleri ve eğimler belirtilecektir.",
+              "text": "33. Islak hacimler tefriş edilecek, süzgeç yerleri ve eğimler belirtilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7034,
+              "no": "34",
+              "desc": "Mahallerin duvar, döşeme ve tavan kaplama malzemeleri belirtilecektir.",
+              "text": "34. Mahallerin duvar, döşeme ve tavan kaplama malzemeleri belirtilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 7035,
+              "no": "35",
+              "desc": "Merdiven detayı 1/20 ölçeğinde çizilecek; TSE standartlarına uygun korkuluklar gösterilecektir.",
+              "text": "35. Merdiven detayı 1/20 ölçeğinde çizilecek; TSE standartlarına uygun korkuluklar gösterilecektir.",
+              "note": "",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "sectionKey": "F3",
+          "text": "F. PLANLAR (1/50) - 3. ÇATI KATI VE ÇATI PLANI",
+          "completed": false,
+          "subtasks": [
+            {
+              "id": 8001,
+              "no": "1",
+              "desc": "Çatı eğimi saçak ucundan hesaplanır. Mahya yüksekliği max 4.00m, eğim max %35 olabilir.",
+              "text": "1. Çatı eğimi saçak ucundan hesaplanır. Mahya yüksekliği max 4.00m, eğim max %35 olabilir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8002,
+              "no": "2",
+              "desc": "Ayrık binalarda kırma, ikili bloklarda müşterek kırma çatı çözülecektir.",
+              "text": "2. Ayrık binalarda kırma, ikili bloklarda müşterek kırma çatı çözülecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8003,
+              "no": "3",
+              "desc": "Çatı Piyesi: Çatı eğimi içinde kalmak şartıyla alt bağımsız bölümle içeriden irtibatlı mekânlar yapılabilir.",
+              "text": "3. Çatı Piyesi: Çatı eğimi içinde kalmak şartıyla alt bağımsız bölümle içeriden irtibatlı mekânlar yapılabilir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8004,
+              "no": "4",
+              "desc": "Çatı çıkmaları: Saçak çıkması yapılmayan binalarda max 1.00m, çıkma yapılanlarda max 0.50m.",
+              "text": "4. Çatı çıkmaları: Saçak çıkması yapılmayan binalarda max 1.00m, çıkma yapılanlarda max 0.50m.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8005,
+              "no": "5",
+              "desc": "Tüm kotlar (mahya, saçak, teras) çatı planında yazılacaktır.",
+              "text": "5. Tüm kotlar (mahya, saçak, teras) çatı planında yazılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8006,
+              "no": "6",
+              "desc": "Çatı meyilleri (yön ve % olarak), su toplama yerleri ve detayları işlenecektir.",
+              "text": "6. Çatı meyilleri (yön ve % olarak), su toplama yerleri ve detayları işlenecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8007,
+              "no": "7",
+              "desc": "Gün ısı sistemi varsa kollektör yerleri, anten yerleri gösterilecektir.",
+              "text": "7. Gün ısı sistemi varsa kollektör yerleri, anten yerleri gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8008,
+              "no": "8",
+              "desc": "Göğebakana çıkış tanımlanmalı, duman tahliye şaftı gösterilmelidir.",
+              "text": "8. Göğebakana çıkış tanımlanmalı, duman tahliye şaftı gösterilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8009,
+              "no": "9",
+              "desc": "Parapet ve teras korkuluğu yüksekliği net 110 cm olacaktır.",
+              "text": "9. Parapet ve teras korkuluğu yüksekliği net 110 cm olacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8010,
+              "no": "10",
+              "desc": "Çatı planında çatı konstrüksiyonu gösterilecek ve malzemeler belirtilecektir.",
+              "text": "10. Çatı planında çatı konstrüksiyonu gösterilecek ve malzemeler belirtilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8011,
+              "no": "11",
+              "desc": "Bacalar, şaftlar ve ışıklıkların tamamı çatı planında gösterilmelidir.",
+              "text": "11. Bacalar, şaftlar ve ışıklıkların tamamı çatı planında gösterilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 8012,
+              "no": "12",
+              "desc": "Dubleks merdiveni genişliği min 90 cm olacak, basamak/rıht kontrol edilecektir.",
+              "text": "12. Dubleks merdiveni genişliği min 90 cm olacak, basamak/rıht kontrol edilecektir.",
+              "note": "",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "sectionKey": "GH",
+          "text": "G. DIŞ ÖLÇÜ & H. İÇ ÖLÇÜ KRİTERLERİ",
+          "completed": false,
+          "subtasks": [
+            {
+              "id": 9001,
+              "no": "G1",
+              "desc": "Dış Ölçü 1. Sıra: Blok toplam dış ölçüsü (Emsal ölçüsü + 20cm motif).",
+              "text": "G1. Dış Ölçü 1. Sıra: Blok toplam dış ölçüsü (Emsal ölçüsü + 20cm motif).",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 9002,
+              "no": "G2",
+              "desc": "Dış Ölçü 2. Sıra: Taşıyıcı akslar ve aks aralık ölçüleri.",
+              "text": "G2. Dış Ölçü 2. Sıra: Taşıyıcı akslar ve aks aralık ölçüleri.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 9003,
+              "no": "G3",
+              "desc": "Dış Ölçü 3. Sıra: Bina cephe hareketleri ölçüleri.",
+              "text": "G3. Dış Ölçü 3. Sıra: Bina cephe hareketleri ölçüleri.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 9004,
+              "no": "G4",
+              "desc": "Dış Ölçü 4. Sıra: Doluluk - boşluk (pencere, kapı) ölçüleri.",
+              "text": "G4. Dış Ölçü 4. Sıra: Doluluk - boşluk (pencere, kapı) ölçüleri.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 9005,
+              "no": "H1",
+              "desc": "İç Ölçü: Her hacimde en az yatay ve dikeyde ikişer ölçü çizgisi verilecektir.",
+              "text": "H1. İç Ölçü: Her hacimde en az yatay ve dikeyde ikişer ölçü çizgisi verilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 9006,
+              "no": "H2",
+              "desc": "İç Ölçü: Pencere ve kapı boşluk ölçüleri net olarak yazılacaktır.",
+              "text": "H2. İç Ölçü: Pencere ve kapı boşluk ölçüleri net olarak yazılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 9007,
+              "no": "H3",
+              "desc": "İç Ölçü: Tüm mahallerin bütün iç boyut ölçüleri mutlaka eksiksiz verilecektir.",
+              "text": "H3. İç Ölçü: Tüm mahallerin bütün iç boyut ölçüleri mutlaka eksiksiz verilecektir.",
+              "note": "",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "sectionKey": "II",
+          "text": "I. KESİTLER (1/50) & İ. GÖRÜNÜŞLER (1/50)",
+          "completed": false,
+          "subtasks": [
+            {
+              "id": 10001,
+              "no": "I1",
+              "desc": "En az iki kesit çizilmelidir. Biri ana merdiven ve bina girişinden geçmelidir.",
+              "text": "I1. En az iki kesit çizilmelidir. Biri ana merdiven ve bina girişinden geçmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10002,
+              "no": "I2",
+              "desc": "Kesitin geçtiği mahallerin isimleri, kotları ve aksları verilmelidir.",
+              "text": "I2. Kesitin geçtiği mahallerin isimleri, kotları ve aksları verilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10003,
+              "no": "I3",
+              "desc": "Pencere altı dolu kısımların malzeme açılımı, kiriş bitişi ayrı ayrı kotlandırılmalıdır.",
+              "text": "I3. Pencere altı dolu kısımların malzeme açılımı, kiriş bitişi ayrı ayrı kotlandırılmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10004,
+              "no": "I4",
+              "desc": "Parapet denizlik detaylarına uygun çizilmeli, ısı yalıtım projesine uygun olmalıdır.",
+              "text": "I4. Parapet denizlik detaylarına uygun çizilmeli, ısı yalıtım projesine uygun olmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10005,
+              "no": "I5",
+              "desc": "Çatı konstrüksiyonu gerçek şekliyle çizilmeli, eğim yazılmalıdır.",
+              "text": "I5. Çatı konstrüksiyonu gerçek şekliyle çizilmeli, eğim yazılmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10006,
+              "no": "I6",
+              "desc": "Bodrum duvarlarında ve temelde ısı/su yalıtımı kesit üzerinde açıklanmalıdır.",
+              "text": "I6. Bodrum duvarlarında ve temelde ısı/su yalıtımı kesit üzerinde açıklanmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10007,
+              "no": "İ1",
+              "desc": "Yapının durumuna göre dört görünüşü de çizilmelidir.",
+              "text": "İ1. Yapının durumuna göre dört görünüşü de çizilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10008,
+              "no": "İ2",
+              "desc": "Farklı düşey düzlemler derinlik hissi verecek çizim teknikleriyle gösterilmelidir.",
+              "text": "İ2. Farklı düşey düzlemler derinlik hissi verecek çizim teknikleriyle gösterilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10009,
+              "no": "İ3",
+              "desc": "Doğal zemin nokta nokta, öneri zemin devamlı çizgi ile gösterilip kotlandırılmalıdır.",
+              "text": "İ3. Doğal zemin nokta nokta, öneri zemin devamlı çizgi ile gösterilip kotlandırılmalıdır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10010,
+              "no": "İ4",
+              "desc": "Zemin altında kalan yapı dış hatları kesik çizgilerle belirtilmelidir.",
+              "text": "İ4. Zemin altında kalan yapı dış hatları kesik çizgilerle belirtilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10011,
+              "no": "İ5",
+              "desc": "Dış duvar kaplamaları yazılmalı, yağmur olukları ve iniş boruları gösterilmelidir.",
+              "text": "İ5. Dış duvar kaplamaları yazılmalı, yağmur olukları ve iniş boruları gösterilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10012,
+              "no": "İ6",
+              "desc": "Kapı/pencere görünüşleri çizilmeli, açılan kanat yönleri işaretlenmelidir.",
+              "text": "İ6. Kapı/pencere görünüşleri çizilmeli, açılan kanat yönleri işaretlenmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10013,
+              "no": "İ7",
+              "desc": "Saçaklar, balkonlar, kalkan duvarlar, oluk, mahya ve bacalara kot verilmelidir.",
+              "text": "İ7. Saçaklar, balkonlar, kalkan duvarlar, oluk, mahya ve bacalara kot verilmelidir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 10014,
+              "no": "İ8",
+              "desc": "Planda görünmeyen ölçüler (korkuluk yüksekliği, söveler vb.) görünüşte yazılmalıdır.",
+              "text": "İ8. Planda görünmeyen ölçüler (korkuluk yüksekliği, söveler vb.) görünüşte yazılmalıdır.",
+              "note": "",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "sectionKey": "J",
+          "text": "J. DİĞER HUSUSLAR VE YÖNETMELİK UYGUNLUĞU",
+          "completed": false,
+          "subtasks": [
+            {
+              "id": 11001,
+              "no": "1",
+              "desc": "Binaların Yangından Korunması Hakkında Yönetmelik hükümlerine tam uyum.",
+              "text": "1. Binaların Yangından Korunması Hakkında Yönetmelik hükümlerine tam uyum.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 11002,
+              "no": "2",
+              "desc": "Sığınak Yönetmeliği hükümlerine ve asgari ölçülerine uyum.",
+              "text": "2. Sığınak Yönetmeliği hükümlerine ve asgari ölçülerine uyum.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 11003,
+              "no": "3",
+              "desc": "Otopark Yönetmeliği hükümlerine uyum.",
+              "text": "3. Otopark Yönetmeliği hükümlerine uyum.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 11004,
+              "no": "4",
+              "desc": "Binalarda Enerji Performansı Yönetmeliği'ne uyum.",
+              "text": "4. Binalarda Enerji Performansı Yönetmeliği'ne uyum.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 11005,
+              "no": "5",
+              "desc": "Deprem Bölgelerinde Yapılacak Binalar Hakkında Yönetmelik (TBDY) uyumu.",
+              "text": "5. Deprem Bölgelerinde Yapılacak Binalar Hakkında Yönetmelik (TBDY) uyumu.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 11006,
+              "no": "6",
+              "desc": "İlgili tüm TSE standartlarına (erişilebilirlik, malzeme vb.) uyum.",
+              "text": "6. İlgili tüm TSE standartlarına (erişilebilirlik, malzeme vb.) uyum.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 11007,
+              "no": "7",
+              "desc": "Tüm projelerde Elektrik Pano Odası mutlaka aranacak ve planda gösterilecektir.",
+              "text": "7. Tüm projelerde Elektrik Pano Odası mutlaka aranacak ve planda gösterilecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 11008,
+              "no": "8",
+              "desc": "Tüm yapılarda Su Deposu alanı mutlaka aranacak ve planda çözülecektir.",
+              "text": "8. Tüm yapılarda Su Deposu alanı mutlaka aranacak ve planda çözülecektir.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 11009,
+              "no": "9",
+              "desc": "5.50 kotu üzerinde yapılan kat terasları ana merdivenle irtibatlandırılacaktır.",
+              "text": "9. 5.50 kotu üzerinde yapılan kat terasları ana merdivenle irtibatlandırılacaktır.",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 11010,
+              "no": "10",
+              "desc": "Altyapı Katılım Ücreti (AYKU) ve Katılım İştirak Ücreti hesaplanacaktır.",
+              "text": "10. Altyapı Katılım Ücreti (AYKU) ve Katılım İştirak Ücreti hesaplanacaktır.",
+              "note": "",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "sectionKey": "K",
+          "text": "K. TABAN ALANI VE EMSAL HESABI KRİTERLERİ (ÖZEL KONTROL)",
+          "completed": false,
+          "subtasks": [
+            {
+              "id": 12001,
+              "no": "K1",
+              "desc": "Taban Alanına Dahil Edilmeyen Koşulsuz Alanlar (Yangın merdiveni, açık havuz, pergola, jeneratör odası vb.)",
+              "text": "K1. Taban Alanına Dahil Edilmeyen Koşulsuz Alanlar (Yangın merdiveni, açık havuz, pergola, jeneratör odası vb.)",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 12002,
+              "no": "K2",
+              "desc": "Bodrum Katlarda %30 Emsal Hesabına Girmeyen Alanlar (Gömülü otopark, sığınak, su deposu, ortak alanlar)",
+              "text": "K2. Bodrum Katlarda %30 Emsal Hesabına Girmeyen Alanlar (Gömülü otopark, sığınak, su deposu, ortak alanlar)",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 12003,
+              "no": "K3",
+              "desc": "Emsal Hesabında %30 İndirim ile Düşülecek Alanlar (Balkonlar, kat holleri, asansör önü sahanlıkları)",
+              "text": "K3. Emsal Hesabında %30 İndirim ile Düşülecek Alanlar (Balkonlar, kat holleri, asansör önü sahanlıkları)",
+              "note": "",
+              "completed": false
+            },
+            {
+              "id": 12004,
+              "no": "K4",
+              "desc": "Emsal Harici Koşulsuz Düşülen Alanlar (Zorunlu yangın merdiveni/holü 6m², ortak alan teras çatılar)",
+              "text": "K4. Emsal Harici Koşulsuz Düşülen Alanlar (Zorunlu yangın merdiveni/holü 6m², ortak alan teras çatılar)",
+              "note": "",
+              "completed": false
+            }
+          ]
         }
       ]
     }
   ],
   "officeNotes": [],
-  "lastUpdated": 1789210300000
+  "lastUpdated": 1789220851091
 }
