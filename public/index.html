@@ -193,7 +193,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .note-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.2); }
-        .note-card-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; padding-right: 52px; word-break: break-word; }
+        .note-card-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; padding-right: 98px; word-break: break-word; }
         .note-card-preview {
             font-size: 0.85rem;
             opacity: 0.85;
@@ -235,6 +235,13 @@
             cursor: pointer; opacity: 0.55; transition: all 0.2s; color: inherit;
         }
         .note-card-menu-btn:hover { opacity: 1; background: rgba(0,0,0,0.2); }
+        .note-card-pip-btn {
+            position: absolute; top: 10px; right: 70px;
+            background: rgba(0,0,0,0.1); border: none; border-radius: 50%;
+            width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; opacity: 0.55; transition: all 0.2s; color: inherit;
+        }
+        .note-card-pip-btn:hover { opacity: 1; transform: scale(1.15); background: rgba(0,0,0,0.25); }
 
         .modal-overlay-note {
             display: none;
@@ -1106,6 +1113,55 @@
         #floating-pip-widget.pip-minimized .pip-body, 
         #floating-pip-widget.pip-minimized .pip-footer { display: none !important; }
 
+        /* PiP NOT GÖRÜNÜMÜ */
+        .pip-note-container {
+            display: flex; flex-direction: column; gap: 8px; flex-grow: 1; height: 100%; min-height: 0; box-sizing: border-box;
+        }
+        .pip-note-textarea {
+            width: 100%; flex-grow: 1; min-height: 140px; resize: none;
+            background: rgba(0, 0, 0, 0.06); border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 8px; padding: 10px; color: inherit; font-family: inherit;
+            font-size: 0.92rem; line-height: 1.5; outline: none; box-sizing: border-box;
+        }
+        .pip-note-textarea:focus { background: rgba(0, 0, 0, 0.1); border-color: rgba(0, 0, 0, 0.35); }
+        .pip-note-subnotes-wrap {
+            display: flex; flex-direction: column; gap: 6px;
+            background: rgba(0, 0, 0, 0.05); border-radius: 8px; padding: 8px 10px;
+            border: 1px solid rgba(0, 0, 0, 0.08); flex-shrink: 0; max-height: 190px;
+        }
+        .pip-subnotes-header {
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 0.76rem; font-weight: 700; opacity: 0.85;
+        }
+        .pip-subnotes-badge {
+            background: rgba(0, 0, 0, 0.12); padding: 1px 7px; border-radius: 10px; font-size: 0.7rem;
+        }
+        .pip-subnotes-list {
+            display: flex; flex-direction: column; gap: 4px; overflow-y: auto; max-height: 110px; scrollbar-width: thin;
+        }
+        .pip-subnote-row {
+            display: flex; align-items: center; gap: 6px; font-size: 0.82rem;
+            background: rgba(0, 0, 0, 0.05); padding: 4px 8px; border-radius: 5px;
+        }
+        .pip-subnote-bullet { opacity: 0.6; font-weight: 700; }
+        .pip-subnote-text { flex-grow: 1; cursor: text; word-break: break-word; }
+        .pip-subnote-del {
+            background: transparent; border: none; color: inherit; opacity: 0.5;
+            cursor: pointer; padding: 2px 4px; display: flex; align-items: center; border-radius: 4px;
+        }
+        .pip-subnote-del:hover { opacity: 1; color: #ff4757; background: rgba(255, 71, 87, 0.15); }
+        .pip-subnote-add-row { display: flex; gap: 6px; margin-top: 4px; }
+        .pip-subnote-input {
+            flex-grow: 1; padding: 5px 8px; border-radius: 6px; border: 1px dashed rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.06); color: inherit; font-size: 0.8rem; outline: none;
+        }
+        .pip-subnote-input:focus { border-style: solid; border-color: currentColor; background: rgba(0, 0, 0, 0.1); }
+        .pip-subnote-add-btn {
+            background: rgba(0, 0, 0, 0.15); border: 1px solid rgba(0, 0, 0, 0.18); color: inherit;
+            padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;
+        }
+        .pip-subnote-add-btn:hover { background: rgba(0, 0, 0, 0.25); }
+
         /* VURGU VE ALT ÇİZGİ STİLLERİ */
         .hl-pen-underline { text-decoration: underline !important; text-decoration-color: #ff3344 !important; text-decoration-thickness: 2.5px !important; text-underline-offset: 3px !important; font-weight: 700; display: inline; }
         .hl-pen-strike { text-decoration: line-through !important; text-decoration-color: #ff1744 !important; text-decoration-thickness: 2px !important; opacity: 0.75; display: inline; }
@@ -1455,6 +1511,10 @@
         <div class="note-modal-box" id="note-modal-box" onclick="event.stopPropagation()">
             <div class="note-modal-header">
                 <input type="text" id="note-title-input" class="note-title-input" placeholder="Not Başlığı...">
+                <button class="btn btn-close" onclick="popoutNoteModalToPip()" title="Tüm Uygulamaların Üzerinde Sabitle (Always-on-Top PiP)" style="white-space: nowrap; display: flex; align-items: center; gap: 6px;">
+                    <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><rect x="11" y="9" width="9" height="7" rx="1" ry="1" fill="currentColor"></rect></svg>
+                    Masaüstünde Tut (PiP)
+                </button>
             </div>
             <div class="note-modal-body">
                 <textarea id="note-textarea" class="note-textarea" placeholder="Notunuzu buraya yazın..."></textarea>
@@ -1475,7 +1535,13 @@
                     </button>
                     <button class="btn btn-close" style="padding: 6px 12px; font-size: 0.8rem;" onclick="resetNoteColor()">Rengi Sıfırla</button>
                 </div>
-                <button class="btn btn-close" onclick="saveAndCloseNoteModal()">Kapat &amp; Kaydet</button>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button class="btn btn-close" onclick="popoutNoteModalToPip()" title="Tüm Uygulamaların Üzerinde Sabitle (Always-on-Top PiP)">
+                        <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><rect x="11" y="9" width="9" height="7" rx="1" ry="1" fill="currentColor"></rect></svg>
+                        Masaüstünde Tut (PiP)
+                    </button>
+                    <button class="btn btn-close" onclick="saveAndCloseNoteModal()">Kapat &amp; Kaydet</button>
+                </div>
             </div>
             <div class="color-picker-wrapper" id="note-color-picker-wrapper">
                 <div class="color-picker-header">
@@ -1719,6 +1785,7 @@
 
         let currentEditingProjectId = null;
         let currentPipProjectId = null;
+        let currentPipTarget = { type: 'project', id: null };
         let nativePipWindow = null; 
         let isPipDragging = false;
         let pipStartX, pipStartY, pipStartLeft, pipStartTop;
@@ -2455,7 +2522,7 @@
                 if (note.color) card.style.backgroundColor = note.color;
 
                 card.onclick = (e) => {
-                    if (!e.target.closest('.note-card-del') && !e.target.closest('.note-card-menu-btn')) {
+                    if (!e.target.closest('.note-card-del') && !e.target.closest('.note-card-menu-btn') && !e.target.closest('.note-card-pip-btn')) {
                         triggerSparkleBurst(e.clientX, e.clientY, 26, { burstSpeed: 4.2 });
                         openNoteEditor(note.id);
                     }
@@ -2468,6 +2535,9 @@
                     .replace(/>/g, '&gt;');
 
                 card.innerHTML = `
+                    <button class="note-card-pip-btn" onclick="openFloatingPipNote(${note.id}, event)" title="Tüm Uygulamaların Üstünde Tut (Masaüstü PiP)">
+                        <svg class="icon-svg" viewBox="0 0 24 24" style="width:13px;height:13px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><rect x="11" y="9" width="9" height="7" rx="1" ry="1" fill="currentColor"></rect></svg>
+                    </button>
                     <button class="note-card-menu-btn" onclick="toggleCardMenu('note', ${note.id}, this, event)" title="Klasöre Taşı / Arşivle / Sil">
                         <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
                     </button>
@@ -2481,6 +2551,8 @@
                 `;
                 container.appendChild(card);
             });
+
+            if (currentPipTarget && currentPipTarget.type === 'note') renderPipContent();
         }
 
         function createOfficeNote() {
@@ -3375,7 +3447,26 @@
         }
 
         function applyProjectColor(color) {
-            const targetProj = currentEditingProjectId ? projects.find(p => p.id === currentEditingProjectId) : (currentPipProjectId ? projects.find(p => p.id === currentPipProjectId) : null);
+            if (currentPipTarget && currentPipTarget.type === 'note') {
+                const note = officeNotes.find(n => n.id === currentPipTarget.id);
+                if (note) {
+                    recordState();
+                    note.color = color;
+                    note.updatedAt = getFormattedDate();
+                    saveOfficeNotes();
+
+                    const noteBox = document.getElementById('note-modal-box');
+                    if (noteBox && currentEditingNoteId === note.id) {
+                        noteBox.style.backgroundColor = color;
+                        noteBox.style.color = getContrastColor(color);
+                    }
+
+                    renderPipContent();
+                    renderOfficeNotes();
+                }
+                return;
+            }
+            const targetProj = currentEditingProjectId ? projects.find(p => p.id === currentEditingProjectId) : (currentPipProjectId ? projects.find(p => p.id === currentPipProjectId) : (currentPipTarget && currentPipTarget.type === 'project' ? projects.find(p => p.id === currentPipTarget.id) : null));
             if (targetProj) {
                 recordState();
                 targetProj.color = color;
@@ -3413,6 +3504,15 @@
             document.body.appendChild(el);
         }
 
+        function cardMenuOpenPip() {
+            const type = cardMenuTargetType;
+            const id = cardMenuTargetId;
+            closeCardMenu();
+            if (!id) return;
+            if (type === 'project') openFloatingPip(id);
+            else openFloatingPipNote(id);
+        }
+
         function toggleCardMenu(type, id, btnEl, event) {
             if (event) event.stopPropagation();
             buildCardMenuPopover();
@@ -3428,6 +3528,11 @@
             if (!item) return;
 
             popover.innerHTML = `
+                <button class="card-menu-item" onclick="cardMenuOpenPip()">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><rect x="11" y="9" width="9" height="7" rx="1" ry="1" fill="currentColor"></rect></svg>
+                    Masaüstünde Tut (PiP)
+                </button>
+                <div class="card-menu-sep"></div>
                 <button class="card-menu-item" onclick="cardMenuMoveToFolder()">
                     <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
                     Klasöre Taşı...
@@ -3488,7 +3593,7 @@
 
         function cardMenuSaveAndRefresh() {
             if (cardMenuTargetType === 'project') { saveProjects(); renderProjects(); renderPipContent(); }
-            else { saveOfficeNotes(); renderOfficeNotes(); }
+            else { saveOfficeNotes(); renderOfficeNotes(); renderPipContent(); }
         }
 
         function cardMenuMoveToFolder() {
@@ -3557,7 +3662,7 @@
 
         function cardMenuSaveAndRefreshForType(type) {
             if (type === 'project') { saveProjects(); renderProjects(); renderPipContent(); }
-            else { saveOfficeNotes(); renderOfficeNotes(); }
+            else { saveOfficeNotes(); renderOfficeNotes(); renderPipContent(); }
         }
 
         /* ALWAYS-ON-TOP OS PiP MOTORU */
@@ -3637,10 +3742,66 @@
             .hl-pen-blue { background-color: rgba(128, 216, 255, 0.85) !important; color: #111827 !important; border-radius: 3px; padding: 1px 4px; font-weight: 600; display: inline; }
             .hl-pen-pink { background-color: rgba(255, 128, 171, 0.85) !important; color: #111827 !important; border-radius: 3px; padding: 1px 4px; font-weight: 600; display: inline; }
             .hl-pen-orange { background-color: rgba(255, 209, 128, 0.85) !important; color: #111827 !important; border-radius: 3px; padding: 1px 4px; font-weight: 600; display: inline; }
+
+            /* PiP Not Görünümü */
+            .pip-note-container {
+                display: flex; flex-direction: column; gap: 8px; flex-grow: 1; height: 100%; min-height: 0; box-sizing: border-box;
+            }
+            .pip-note-textarea {
+                width: 100%; flex-grow: 1; min-height: 140px; resize: none;
+                background: rgba(0, 0, 0, 0.06); border: 1px solid rgba(0, 0, 0, 0.15);
+                border-radius: 8px; padding: 10px; color: inherit; font-family: inherit;
+                font-size: 0.92rem; line-height: 1.5; outline: none; box-sizing: border-box;
+            }
+            .pip-note-textarea:focus { background: rgba(0, 0, 0, 0.1); border-color: rgba(0, 0, 0, 0.35); }
+            .pip-note-subnotes-wrap {
+                display: flex; flex-direction: column; gap: 6px;
+                background: rgba(0, 0, 0, 0.05); border-radius: 8px; padding: 8px 10px;
+                border: 1px solid rgba(0, 0, 0, 0.08); flex-shrink: 0; max-height: 190px;
+            }
+            .pip-subnotes-header {
+                display: flex; align-items: center; justify-content: space-between;
+                font-size: 0.76rem; font-weight: 700; opacity: 0.85;
+            }
+            .pip-subnotes-badge {
+                background: rgba(0, 0, 0, 0.12); padding: 1px 7px; border-radius: 10px; font-size: 0.7rem;
+            }
+            .pip-subnotes-list {
+                display: flex; flex-direction: column; gap: 4px; overflow-y: auto; max-height: 110px; scrollbar-width: thin;
+            }
+            .pip-subnote-row {
+                display: flex; align-items: center; gap: 6px; font-size: 0.82rem;
+                background: rgba(0, 0, 0, 0.05); padding: 4px 8px; border-radius: 5px;
+            }
+            .pip-subnote-bullet { opacity: 0.6; font-weight: 700; }
+            .pip-subnote-text { flex-grow: 1; cursor: text; word-break: break-word; }
+            .pip-subnote-del {
+                background: transparent; border: none; color: inherit; opacity: 0.5;
+                cursor: pointer; padding: 2px 4px; display: flex; align-items: center; border-radius: 4px;
+            }
+            .pip-subnote-del:hover { opacity: 1; color: #ff4757; background: rgba(255, 71, 87, 0.15); }
+            .pip-subnote-add-row { display: flex; gap: 6px; margin-top: 4px; }
+            .pip-subnote-input {
+                flex-grow: 1; padding: 5px 8px; border-radius: 6px; border: 1px dashed rgba(0, 0, 0, 0.25);
+                background: rgba(0, 0, 0, 0.06); color: inherit; font-size: 0.8rem; outline: none;
+            }
+            .pip-subnote-input:focus { border-style: solid; border-color: currentColor; background: rgba(0, 0, 0, 0.1); }
+            .pip-subnote-add-btn {
+                background: rgba(0, 0, 0, 0.15); border: 1px solid rgba(0, 0, 0, 0.18); color: inherit;
+                padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;
+            }
+            .pip-subnote-add-btn:hover { background: rgba(0, 0, 0, 0.25); }
         `;
 
-        async function openNativeOsPip(projectId) {
-            currentPipProjectId = projectId;
+        async function openNativeOsPip(targetId, type = 'project') {
+            if (type === 'project') {
+                currentPipProjectId = targetId;
+                currentPipTarget = { type: 'project', id: targetId };
+            } else {
+                currentPipProjectId = null;
+                currentPipTarget = { type: 'note', id: targetId };
+            }
+
             if ('documentPictureInPicture' in window) {
                 try {
                     if (nativePipWindow && !nativePipWindow.closed) {
@@ -3657,13 +3818,16 @@
                     nativePipWindow.addEventListener('pagehide', () => {
                         nativePipWindow = null;
                         currentPipProjectId = null;
+                        currentPipTarget = { type: 'project', id: null };
                     });
 
                     document.getElementById('floating-pip-widget').style.display = 'none';
                     document.getElementById('modal-overlay').style.display = 'none';
+                    document.getElementById('note-modal-overlay').style.display = 'none';
                     currentEditingProjectId = null;
+                    currentEditingNoteId = null;
                     renderPipContent();
-                    showToast("📌 Panel masaüstünde sabitlendi!");
+                    showToast(type === 'note' ? "📝 Not masaüstünde sabitlendi!" : "📌 Panel masaüstünde sabitlendi!");
                     return;
                 } catch (err) {
                     console.warn("Native PiP açılamadı, sayfa içi widget devrede:", err);
@@ -3674,13 +3838,20 @@
             widget.style.display = 'flex';
             widget.classList.remove('pip-minimized');
             document.getElementById('modal-overlay').style.display = 'none';
+            document.getElementById('note-modal-overlay').style.display = 'none';
             currentEditingProjectId = null;
+            currentEditingNoteId = null;
             renderPipContent();
         }
 
         function openFloatingPip(projectId, event) {
             if (event) event.stopPropagation();
-            openNativeOsPip(projectId);
+            openNativeOsPip(projectId, 'project');
+        }
+
+        function openFloatingPipNote(noteId, event) {
+            if (event) event.stopPropagation();
+            openNativeOsPip(noteId, 'note');
         }
 
         function popoutModalToPip() {
@@ -3691,9 +3862,21 @@
             }
         }
 
+        function popoutNoteModalToPip() {
+            if (currentEditingNoteId) {
+                const id = currentEditingNoteId;
+                saveAndCloseNoteModal();
+                openFloatingPipNote(id);
+            }
+        }
+
         function maximizePipToModal() {
-            if (currentPipProjectId) {
-                const id = currentPipProjectId;
+            if (currentPipTarget && currentPipTarget.type === 'note') {
+                const id = currentPipTarget.id;
+                closePipWidget();
+                openNoteEditor(id);
+            } else if (currentPipProjectId || (currentPipTarget && currentPipTarget.type === 'project')) {
+                const id = currentPipProjectId || currentPipTarget.id;
                 closePipWidget();
                 openModal(id);
             }
@@ -3706,13 +3889,34 @@
             }
             document.getElementById('floating-pip-widget').style.display = 'none';
             currentPipProjectId = null;
+            currentPipTarget = { type: 'project', id: null };
         }
 
         function toggleMinimizePip() { document.getElementById('floating-pip-widget').classList.toggle('pip-minimized'); }
 
+        function renamePipTarget() {
+            if (currentPipTarget && currentPipTarget.type === 'note') {
+                const note = officeNotes.find(n => n.id === currentPipTarget.id);
+                if (!note) return;
+                const newT = prompt("Not Başlığı:", note.title);
+                if (newT !== null && newT.trim() && newT.trim() !== note.title) {
+                    recordState();
+                    note.title = newT.trim();
+                    note.updatedAt = getFormattedDate();
+                    saveOfficeNotes();
+                    renderPipContent();
+                    renderOfficeNotes();
+                    showToast("Not başlığı güncellendi.");
+                }
+                return;
+            }
+            renamePipProject();
+        }
+
         function renamePipProject() {
-            if (!currentPipProjectId) return;
-            const project = projects.find(p => p.id === currentPipProjectId);
+            const projId = currentPipProjectId || (currentPipTarget && currentPipTarget.type === 'project' ? currentPipTarget.id : null);
+            if (!projId) return;
+            const project = projects.find(p => p.id === projId);
             if (!project) return;
             const newT = prompt("Proje Başlığı:", project.title);
             if (newT && newT.trim() && newT.trim() !== project.title) {
@@ -3726,26 +3930,12 @@
         }
 
         function renderPipContent() {
-            if (!currentPipProjectId) return;
-            const project = projects.find(p => p.id === currentPipProjectId);
-            if (!project) return;
+            const isNote = currentPipTarget && currentPipTarget.type === 'note';
+            const isProject = (!isNote && currentPipProjectId) || (currentPipTarget && currentPipTarget.type === 'project');
 
-            const cardBgColor = project.color || '#85b88f';
-            const cardTextColor = getContrastColor(cardBgColor);
-
-            let total = 0, done = 0;
-            if (project.tasks) {
-                project.tasks.forEach(t => {
-                    total++; if (t.completed) done++;
-                    if (t.subtasks) t.subtasks.forEach(st => { total++; if (st.completed) done++; });
-                });
-            }
-            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-            const badgeText = `%${pct} (${done}/${total})`;
+            if (!isNote && !isProject) return;
 
             let targetDoc = document;
-            let listEl, titleEl, badgeEl;
-
             if (nativePipWindow && !nativePipWindow.closed) {
                 targetDoc = nativePipWindow.document;
                 if (!targetDoc.getElementById('native-pip-root')) {
@@ -3768,9 +3958,12 @@
                                         <svg style="width:14px;height:14px;" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
                                         <input type="color" id="native-color-picker" class="spectrum-input-hidden">
                                     </label>
+                                    <button class="pip-btn" id="native-max-btn" title="Tam Ekrana Genişlet">
+                                        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="pip-toolbar">
+                            <div class="pip-toolbar" id="native-pip-toolbar">
                                 <span style="opacity:0.75; font-weight:700;">Sırala:</span>
                                 <div class="pip-sort-group">
                                     <button class="pip-sort-btn" id="native-sort-az" title="A'dan Z'ye">A-Z</button>
@@ -3780,7 +3973,7 @@
                                 </div>
                             </div>
                             <div class="pip-body" id="native-pip-list"></div>
-                            <div class="pip-footer">
+                            <div class="pip-footer" id="native-pip-footer">
                                 <input type="text" id="native-pip-input" class="pip-input" placeholder="Hızlı ana madde ekle...">
                                 <button class="pip-add-btn" id="native-pip-add-btn">Ekle</button>
                             </div>
@@ -3788,30 +3981,219 @@
                     `;
                     const nInput = targetDoc.getElementById('native-pip-input');
                     const nBtn = targetDoc.getElementById('native-pip-add-btn');
-                    nBtn.onclick = () => { addPipTaskFromVal(nInput.value); nInput.value = ''; };
-                    nInput.onkeypress = (e) => { if (e.key === 'Enter') { addPipTaskFromVal(nInput.value); nInput.value = ''; } };
+                    if (nBtn && nInput) {
+                        nBtn.onclick = () => { addPipTaskFromVal(nInput.value); nInput.value = ''; };
+                        nInput.onkeypress = (e) => { if (e.key === 'Enter') { addPipTaskFromVal(nInput.value); nInput.value = ''; } };
+                    }
                     
                     const nColor = targetDoc.getElementById('native-color-picker');
-                    nColor.oninput = (e) => applyProjectColor(e.target.value);
+                    if (nColor) nColor.oninput = (e) => applyProjectColor(e.target.value);
 
                     const nUndo = targetDoc.getElementById('native-undo-btn');
-                    nUndo.onclick = () => undoAction();
+                    if (nUndo) nUndo.onclick = () => undoAction();
 
                     const nRedo = targetDoc.getElementById('native-redo-btn');
                     if (nRedo) nRedo.onclick = () => redoAction();
+
+                    const nMax = targetDoc.getElementById('native-max-btn');
+                    if (nMax) nMax.onclick = () => maximizePipToModal();
 
                     targetDoc.getElementById('native-sort-az').onclick = () => sortTasks('az');
                     targetDoc.getElementById('native-sort-za').onclick = () => sortTasks('za');
                     targetDoc.getElementById('native-sort-done').onclick = () => sortTasks('completed');
                     targetDoc.getElementById('native-sort-rev').onclick = () => sortTasks('reverse');
 
-                    targetDoc.getElementById('native-pip-title').onclick = renamePipProject;
+                    targetDoc.getElementById('native-pip-title').onclick = renamePipTarget;
+                }
+            }
+
+            if (isNote) {
+                const note = officeNotes.find(n => n.id === currentPipTarget.id);
+                if (!note) return;
+
+                const cardBgColor = note.color || '#fdf6b2';
+                const cardTextColor = getContrastColor(cardBgColor);
+                const badgeText = '📝 Not';
+
+                let listEl, titleEl, badgeEl, toolbarEl, footerEl;
+
+                if (nativePipWindow && !nativePipWindow.closed) {
+                    targetDoc = nativePipWindow.document;
+                    targetDoc.body.style.backgroundColor = cardBgColor;
+                    targetDoc.body.style.color = cardTextColor;
+                    const root = targetDoc.getElementById('native-pip-root');
+                    if (root) {
+                        root.style.backgroundColor = cardBgColor;
+                        root.style.color = cardTextColor;
+                    }
+                    titleEl = targetDoc.getElementById('native-pip-title');
+                    badgeEl = targetDoc.getElementById('native-pip-badge');
+                    listEl = targetDoc.getElementById('native-pip-list');
+                    toolbarEl = targetDoc.getElementById('native-pip-toolbar');
+                    footerEl = targetDoc.getElementById('native-pip-footer');
+                } else {
+                    const widget = document.getElementById('floating-pip-widget');
+                    widget.style.backgroundColor = cardBgColor;
+                    widget.style.color = cardTextColor;
+
+                    titleEl = document.getElementById('pip-project-title');
+                    badgeEl = document.getElementById('pip-task-progress');
+                    listEl = document.getElementById('pip-task-list');
+                    toolbarEl = widget.querySelector('.pip-toolbar');
+                    footerEl = widget.querySelector('.pip-footer');
                 }
 
+                if (toolbarEl) toolbarEl.style.display = 'none';
+                if (footerEl) footerEl.style.display = 'none';
+
+                if (titleEl) {
+                    titleEl.textContent = note.title || 'İsimsiz Not';
+                    titleEl.onclick = renamePipTarget;
+                }
+                if (badgeEl) badgeEl.textContent = badgeText;
+                if (!listEl) return;
+
+                listEl.innerHTML = `
+                    <div class="pip-note-container">
+                        <textarea class="pip-note-textarea" id="pip-note-editor-ta" placeholder="Notunuzu buraya yazın..." spellcheck="false"></textarea>
+                        <div class="pip-note-subnotes-wrap">
+                            <div class="pip-subnotes-header">
+                                <span>Ek Notlar / Maddeler</span>
+                                <span class="pip-subnotes-badge" id="pip-subnotes-count">${(note.subNotes || []).length}</span>
+                            </div>
+                            <div class="pip-subnotes-list" id="pip-subnotes-items"></div>
+                            <div class="pip-subnote-add-row">
+                                <input type="text" class="pip-subnote-input" id="pip-subnote-add-inp" placeholder="Ek not / madde ekle..." enterkeyhint="done">
+                                <button class="pip-subnote-add-btn" id="pip-subnote-add-btn">Ekle</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                const ta = listEl.querySelector('#pip-note-editor-ta');
+                if (ta) {
+                    ta.value = note.content || '';
+                    ta.oninput = () => {
+                        note.content = ta.value;
+                        note.updatedAt = getFormattedDate();
+                        saveOfficeNotes();
+                        const mainTa = document.getElementById('note-textarea');
+                        if (mainTa && currentEditingNoteId === note.id) mainTa.value = ta.value;
+                        renderOfficeNotes();
+                    };
+                }
+
+                const subItemsList = listEl.querySelector('#pip-subnotes-items');
+                if (subItemsList) {
+                    subItemsList.innerHTML = '';
+                    if (note.subNotes && note.subNotes.length > 0) {
+                        note.subNotes.forEach(sn => {
+                            const row = targetDoc.createElement('div');
+                            row.className = 'pip-subnote-row';
+                            
+                            const bullet = targetDoc.createElement('span');
+                            bullet.className = 'pip-subnote-bullet';
+                            bullet.textContent = '•';
+                            
+                            const textSpan = targetDoc.createElement('span');
+                            textSpan.className = 'pip-subnote-text';
+                            textSpan.textContent = sn.text;
+                            textSpan.title = 'Düzenlemek için çift tıklayın';
+                            textSpan.ondblclick = () => {
+                                const updated = prompt('Ek Notu Düzenle:', sn.text);
+                                if (updated !== null && updated.trim() && updated.trim() !== sn.text) {
+                                    sn.text = updated.trim();
+                                    note.updatedAt = getFormattedDate();
+                                    saveOfficeNotes();
+                                    renderPipContent();
+                                    renderOfficeNotes();
+                                }
+                            };
+
+                            const delBtn = targetDoc.createElement('button');
+                            delBtn.className = 'pip-subnote-del';
+                            delBtn.title = 'Sil';
+                            delBtn.innerHTML = `<svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg>`;
+                            delBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                note.subNotes = note.subNotes.filter(s => s.id !== sn.id);
+                                note.updatedAt = getFormattedDate();
+                                saveOfficeNotes();
+                                renderPipContent();
+                                renderOfficeNotes();
+                            };
+
+                            row.appendChild(bullet);
+                            row.appendChild(textSpan);
+                            row.appendChild(delBtn);
+                            subItemsList.appendChild(row);
+                        });
+                    } else {
+                        subItemsList.innerHTML = `<div style="opacity:0.5; font-size:0.75rem; padding: 2px 0;">Henüz ek not yok.</div>`;
+                    }
+                }
+
+                const addInp = listEl.querySelector('#pip-subnote-add-inp');
+                const addBtn = listEl.querySelector('#pip-subnote-add-btn');
+                if (addInp && addBtn) {
+                    const doAdd = () => {
+                        const val = (addInp.value || '').trim();
+                        if (!val) return;
+                        if (!note.subNotes) note.subNotes = [];
+                        note.subNotes.push({ id: Date.now(), text: val });
+                        note.updatedAt = getFormattedDate();
+                        saveOfficeNotes();
+                        renderPipContent();
+                        renderOfficeNotes();
+                    };
+                    addBtn.onclick = doAdd;
+                    addInp.onkeypress = (e) => { if (e.key === 'Enter') doAdd(); };
+                }
+                return;
+            }
+
+            // Project mode:
+            const projId = currentPipProjectId || (currentPipTarget && currentPipTarget.type === 'project' ? currentPipTarget.id : null);
+            if (!projId) return;
+            const project = projects.find(p => p.id === projId);
+            if (!project) return;
+
+            let toolbarEl, footerEl;
+            if (nativePipWindow && !nativePipWindow.closed) {
+                toolbarEl = targetDoc.getElementById('native-pip-toolbar');
+                footerEl = targetDoc.getElementById('native-pip-footer');
+            } else {
+                const widget = document.getElementById('floating-pip-widget');
+                toolbarEl = widget.querySelector('.pip-toolbar');
+                footerEl = widget.querySelector('.pip-footer');
+            }
+            if (toolbarEl) toolbarEl.style.display = 'flex';
+            if (footerEl) footerEl.style.display = 'flex';
+
+            const cardBgColor = project.color || '#85b88f';
+            const cardTextColor = getContrastColor(cardBgColor);
+
+            let total = 0, done = 0;
+            if (project.tasks) {
+                project.tasks.forEach(t => {
+                    total++; if (t.completed) done++;
+                    if (t.subtasks) t.subtasks.forEach(st => { total++; if (st.completed) done++; });
+                });
+            }
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+            const badgeText = `%${pct} (${done}/${total})`;
+
+            let listEl, titleEl, badgeEl;
+
+            if (nativePipWindow && !nativePipWindow.closed) {
+                targetDoc = nativePipWindow.document;
                 targetDoc.body.style.backgroundColor = cardBgColor;
                 targetDoc.body.style.color = cardTextColor;
-                targetDoc.getElementById('native-pip-root').style.backgroundColor = cardBgColor;
-                targetDoc.getElementById('native-pip-root').style.color = cardTextColor;
+                const root = targetDoc.getElementById('native-pip-root');
+                if (root) {
+                    root.style.backgroundColor = cardBgColor;
+                    root.style.color = cardTextColor;
+                }
 
                 titleEl = targetDoc.getElementById('native-pip-title');
                 badgeEl = targetDoc.getElementById('native-pip-badge');
@@ -3822,7 +4204,7 @@
                 widget.style.color = cardTextColor;
 
                 titleEl = document.getElementById('pip-project-title');
-                titleEl.onclick = renamePipProject;
+                titleEl.onclick = renamePipTarget;
                 badgeEl = document.getElementById('pip-task-progress');
                 listEl = document.getElementById('pip-task-list');
             }
@@ -3830,6 +4212,7 @@
             if (!listEl) return;
 
             titleEl.textContent = project.title;
+            titleEl.onclick = renamePipTarget;
             badgeEl.textContent = badgeText;
             listEl.innerHTML = '';
 
@@ -4023,8 +4406,9 @@
         }
 
         function addPipTaskFromVal(val) {
-            if (!val || !val.trim() || !currentPipProjectId) return;
-            const project = projects.find(p => p.id === currentPipProjectId);
+            const projId = currentPipProjectId || (currentPipTarget && currentPipTarget.type === 'project' ? currentPipTarget.id : null);
+            if (!val || !val.trim() || !projId) return;
+            const project = projects.find(p => p.id === projId);
             if (project) {
                 recordState();
                 if (!project.tasks) project.tasks = [];
@@ -4038,7 +4422,8 @@
 
         function addPipTask() {
             const inp = document.getElementById('pip-new-task-input');
-            if (inp && inp.value.trim() && currentPipProjectId) {
+            const projId = currentPipProjectId || (currentPipTarget && currentPipTarget.type === 'project' ? currentPipTarget.id : null);
+            if (inp && inp.value.trim() && projId) {
                 addPipTaskFromVal(inp.value.trim());
                 inp.value = '';
             }
