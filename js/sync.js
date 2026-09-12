@@ -466,6 +466,60 @@
             showToast('Veritabanı yedeği indirildi.');
         }
 
+        function triggerJsonImport() {
+            const inp = document.getElementById('json-import-input');
+            if (inp) {
+                inp.value = '';
+                inp.click();
+            }
+        }
+
+        function handleJsonImport(e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                    const parsed = JSON.parse(event.target.result);
+                    let importedProjects = null;
+                    let importedNotes = null;
+                    if (Array.isArray(parsed)) {
+                        importedProjects = parsed;
+                    } else if (parsed && typeof parsed === 'object') {
+                        importedProjects = parsed.projects || parsed.mimzProjects || null;
+                        importedNotes = parsed.officeNotes || parsed.office_notes || parsed.mimzOfficeNotes || null;
+                    }
+
+                    if (!importedProjects && !importedNotes) {
+                        alert('Geçersiz yedek dosyası formatı.');
+                        return;
+                    }
+
+                    if (confirm('Yedek dosyasındaki veriler içe aktarılacak ve mevcut verileriniz güncellenecektir. Onaylıyor musunuz?')) {
+                        if (importedProjects && Array.isArray(importedProjects)) {
+                            projects = importedProjects;
+                            saveProjects();
+                        }
+                        if (importedNotes && Array.isArray(importedNotes)) {
+                            officeNotes = importedNotes;
+                            saveOfficeNotes();
+                        }
+                        refreshAllViews();
+
+                        if (isSupabaseActive && supabaseClient) {
+                            await uploadLocalDataToSupabase(false);
+                            showToast('✅ Veriler yüklendi ve Supabase bulutuna eşitlendi!', 'info');
+                        } else {
+                            showToast('✅ Veriler başarıyla içe aktarıldı!', 'info');
+                        }
+                    }
+                } catch (err) {
+                    alert('Dosya okunamadı veya JSON formatı hatalı: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
         function migrateLocalToRemote(force = false) {
             if (!confirm('Bu tarayıcıdaki yerel veriler sunucudaki ortak veritabanına yüklenecektir. Devam edilsin mi?')) return;
             const localP = JSON.parse(localStorage.getItem('mimzProjects') || '[]');

@@ -332,8 +332,11 @@
                 <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
                     <button class="btn-main" style="padding:8px 14px; font-size:0.82rem;" onclick="saveAndConnectSupabase()">Buluta Bağlan &amp; Kaydet</button>
                     <button class="btn-secondary" style="padding:8px 14px; font-size:0.82rem;" onclick="uploadLocalDataToSupabase()">Yerel Veriyi Supabase'e Yükle</button>
+                    <button class="btn-secondary" style="padding:8px 14px; font-size:0.82rem;" onclick="triggerJsonImport()" title="Eski bilgisayarınızdaki veya yedek aldığınız JSON dosyasını içeri aktarır">📥 JSON Yedeği Yükle</button>
+                    <button class="btn-secondary" style="padding:8px 14px; font-size:0.82rem;" onclick="exportDatabaseJson()" title="Tüm mevcut projeleri ve notları JSON dosyası olarak bilgisayara indirir">📤 JSON Yedeği İndir</button>
                     <button class="btn-close" style="padding:8px 12px; font-size:0.8rem;" onclick="disconnectSupabase()">Bağlantıyı Sıfırla</button>
                 </div>
+                <input type="file" id="json-import-input" accept=".json" style="display:none;" onchange="handleJsonImport(event)">
             </div>
 
             <!-- TAB 2: YEREL AĞ (LAN) BİLGİLERİ -->
