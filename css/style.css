@@ -1419,3 +1419,460 @@
         .net-input-field:focus {
             border-color: var(--primary-accent);
         }
+
+/* ==========================================================
+   MİMARİ PROJE & OFİS ARŞİVİ - MOBİL VE TABLET UYUMLULUK (RESPONSIVE)
+   ========================================================== */
+
+/* 1. TABLET VE ORTA EKRANLAR (max-width: 900px) */
+@media (max-width: 900px) {
+    body {
+        padding: 20px 24px;
+    }
+
+    #projects-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+    }
+
+    #office-notes-container {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 14px;
+    }
+
+    #modal-content {
+        width: 96%;
+        height: 92vh;
+    }
+}
+
+/* 2. AKILLI TELEFONLAR VE KÜÇÜK EKRANLAR (max-width: 600px) */
+@media (max-width: 600px) {
+    /* Genel Gövde ve Tipografi */
+    body {
+        padding: 12px 10px;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Dokunmatik Cihazlar İçin Form Elemanları (iOS Auto-Zoom Engelleme) */
+    input, textarea, select {
+        font-size: 16px !important;
+    }
+
+    button {
+        touch-action: manipulation;
+    }
+
+    /* Üst Bar (Header) */
+    header {
+        margin-bottom: 14px;
+        padding-bottom: 12px;
+        gap: 10px;
+    }
+
+    .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .header-top > div:first-child {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    h1 {
+        font-size: 1.15rem;
+        line-height: 1.3;
+    }
+
+    .network-badge {
+        padding: 4px 8px;
+        font-size: 0.72rem;
+    }
+
+    .header-top-actions {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 6px;
+    }
+
+    .header-top-actions .btn-theme {
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header-buttons {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-main, .btn-secondary {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding: 11px 16px;
+        font-size: 0.88rem;
+        border-radius: 12px;
+    }
+
+    /* Mod Sekmeleri (Ruhsat / Genel Ofis) */
+    .mode-tabs-bar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+
+    .mode-tab {
+        padding: 8px 10px;
+        font-size: 0.82rem;
+        justify-content: center;
+        text-align: center;
+        border-radius: 10px;
+        gap: 5px;
+    }
+
+    .mode-tab .icon-svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    /* Filtre Sekmeleri & Breadcrumb */
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .filter-tabs {
+        width: 100%;
+        display: flex;
+        gap: 6px;
+    }
+
+    .filter-tab {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+        padding: 7px 10px;
+        font-size: 0.82rem;
+    }
+
+    .breadcrumb-bar {
+        font-size: 0.95rem;
+        gap: 8px;
+    }
+
+    .btn-back {
+        padding: 5px 12px;
+        font-size: 0.82rem;
+    }
+
+    /* Kart Izgaraları (Grid) -> Telefonda Tek Sütun */
+    #projects-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    #office-notes-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .card, .note-card {
+        padding: 14px 12px;
+        border-radius: 12px;
+        min-height: auto;
+    }
+
+    .card-title {
+        font-size: 1.05rem;
+        padding-right: 90px;
+    }
+
+    .note-card-title {
+        font-size: 0.98rem;
+        padding-right: 85px;
+    }
+
+    .card-actions, .note-actions {
+        top: 10px;
+        right: 10px;
+        gap: 4px;
+    }
+
+    .card-pip-btn, .card-del, .card-menu-btn, .note-card-pip-btn, .note-card-del {
+        padding: 5px;
+    }
+
+    /* Proje / Görev Modalı -> Telefonda Tam Ekran */
+    #modal-overlay {
+        padding: 0;
+    }
+
+    #modal-content {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
+
+    .modal-header {
+        padding: 12px 14px;
+        gap: 8px;
+    }
+
+    .modal-header-top {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    .modal-title-input {
+        width: 100%;
+        font-size: 1.25rem;
+    }
+
+    .modal-header-top-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .folder-input-group {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+    }
+
+    .folder-input-group label {
+        font-size: 0.78rem;
+    }
+
+    .modal-folder-input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Sıralama Çubuğu */
+    .task-sort-bar {
+        padding: 8px 12px;
+        gap: 4px;
+    }
+
+    .task-drag-hint {
+        display: none;
+    }
+
+    .btn-sort {
+        padding: 4px 8px;
+        font-size: 0.72rem;
+    }
+
+    /* Görev Listesi & Görev Maddeleri */
+    .modal-body {
+        padding: 10px 12px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .task-item {
+        padding: 10px 10px;
+        margin-bottom: 8px;
+        border-radius: 8px;
+    }
+
+    .task-main-row {
+        gap: 6px;
+    }
+
+    .task-checkbox {
+        transform: scale(1.35);
+        margin: 0 4px;
+    }
+
+    .task-text {
+        font-size: 0.92rem;
+        line-height: 1.35;
+    }
+
+    .task-actions {
+        gap: 4px;
+    }
+
+    .task-move-btns {
+        gap: 3px;
+    }
+
+    .btn-move {
+        width: 26px;
+        height: 20px;
+    }
+
+    .btn-task-action {
+        padding: 6px;
+    }
+
+    /* Modal Alt Çubuğu (Yeni Görev Ekle & Butonlar) */
+    .modal-footer {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    .new-task-container {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .new-task-input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 16px !important;
+    }
+
+    .btn-add {
+        width: 100%;
+        justify-content: center;
+        padding: 9px 14px;
+    }
+
+    .modal-footer-bottom {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .modal-footer-bottom-left {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .modal-footer-bottom .btn-close {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    /* Not Düzenleme Modalı -> Telefonda Tam Ekran */
+    .modal-overlay-note {
+        padding: 0;
+    }
+
+    .note-modal-box {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
+    }
+
+    .note-modal-header {
+        padding: 12px 14px;
+    }
+
+    .note-title-input {
+        font-size: 1.15rem;
+    }
+
+    .note-modal-body {
+        padding: 12px 14px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .note-textarea {
+        min-height: 180px;
+        font-size: 16px !important;
+        padding: 10px;
+    }
+
+    .note-modal-footer {
+        padding: 10px 12px;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+
+    .note-modal-footer > div {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .note-modal-footer .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Ortak Ağ ve Supabase Modalı */
+    .net-modal-box {
+        width: 95vw;
+        max-height: 92vh;
+        padding: 16px 12px;
+        gap: 12px;
+        border-radius: 12px;
+    }
+
+    .net-tabs-header {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .net-tab-btn {
+        width: 100%;
+        text-align: center;
+        padding: 8px 10px;
+    }
+
+    .net-input-field {
+        font-size: 16px !important;
+        padding: 10px;
+    }
+
+    #net-tab-supabase-content button, #net-tab-lan-content button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        padding: 9px 12px;
+    }
+
+    /* Sayfa İçi PiP Widgetı (Telefonda Tam Oturma) */
+    #floating-pip-widget {
+        left: 8px !important;
+        right: 8px !important;
+        width: auto !important;
+        max-width: calc(100vw - 16px) !important;
+        bottom: 10px !important;
+        max-height: 80vh !important;
+    }
+
+    /* Toast Bildirimleri */
+    .toast-notification {
+        bottom: 16px;
+        width: 90%;
+        max-width: 340px;
+        text-align: center;
+        justify-content: center;
+        font-size: 0.82rem;
+        padding: 8px 16px;
+    }
+}
+
