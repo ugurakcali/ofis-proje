@@ -14,8 +14,17 @@
         let lastMouseY = window.innerHeight / 2;
         let lastTrailTime = 0;
 
+        function isMobileScreen() {
+            return window.innerWidth <= 768 || (window.matchMedia && window.matchMedia('(max-width: 768px)').matches);
+        }
+
         function resizeSparkleCanvas() {
             if (!sparkleCanvas || !sparkleCtx) return;
+            if (isMobileScreen()) {
+                sparkleCanvas.style.display = 'none';
+                return;
+            }
+            sparkleCanvas.style.display = 'block';
             const dpr = window.devicePixelRatio || 1;
             sparkleCanvas.width = Math.floor(window.innerWidth * dpr);
             sparkleCanvas.height = Math.floor(window.innerHeight * dpr);
@@ -191,6 +200,10 @@
         let ambientDustParticles = [];
         const AMBIENT_DUST_COUNT = 4000;
         function initAmbientDust() {
+            if (isMobileScreen()) {
+                ambientDustParticles = [];
+                return;
+            }
             ambientDustParticles = [];
             for (let i = 0; i < AMBIENT_DUST_COUNT; i++) {
                 ambientDustParticles.push(new AmbientDustParticle());
@@ -199,6 +212,7 @@
         initAmbientDust();
 
         function startSparkleLoopIfNeeded() {
+            if (isMobileScreen()) return;
             if (!isSparkleAnimating) {
                 isSparkleAnimating = true;
                 requestAnimationFrame(sparkleAnimationStep);
@@ -206,7 +220,7 @@
         }
 
         function sparkleAnimationStep() {
-            if (!sparkleCtx || !sparkleCanvas) return;
+            if (!sparkleCtx || !sparkleCanvas || isMobileScreen()) return;
             sparkleCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
             // Kalıcı arka plan toz ışıltısı her karede çizilir
@@ -230,6 +244,7 @@
         }
 
         function spawnSparkle(x, y, options = {}) {
+            if (isMobileScreen()) return;
             if (sparkleParticles.length > 320) {
                 sparkleParticles.splice(0, 15);
             }
@@ -267,6 +282,7 @@
         }, { passive: true });
 
         window.addEventListener('touchmove', (e) => {
+            if (isMobileScreen()) return;
             if (e.touches && e.touches[0]) {
                 const t = e.touches[0];
                 lastMouseX = t.clientX;
@@ -281,6 +297,7 @@
 
         /* 2 & 3. SAÇILARAK DAĞILAN IŞILTI PATLAMASI (BURST / SCATTER) */
         function triggerSparkleBurst(x, y, count = 28, options = {}) {
+            if (isMobileScreen()) return;
             const originX = (x !== undefined && x !== null) ? x : lastMouseX;
             const originY = (y !== undefined && y !== null) ? y : lastMouseY;
             const baseSpeed = options.burstSpeed || 4.2;
@@ -305,6 +322,7 @@
         // Bir elemanın kenarları boyunca dolanan yoğun ışıltı efekti
         // (örn. bir to-do maddesine tıklanınca etrafını sarar)
         function triggerFrameSparkle(el, count = 42) {
+            if (isMobileScreen()) return;
             if (!el || !el.getBoundingClientRect) return;
             const rect = el.getBoundingClientRect();
             if (rect.width <= 0 || rect.height <= 0) return;
@@ -339,6 +357,7 @@
 
         // Herhangi bir komut/işlem tetiklendiğinde ışıltıyı çevreye dağıtır
         function triggerSparkleBurstOnAction(source = null) {
+            if (isMobileScreen()) return;
             let burstX = lastMouseX;
             let burstY = lastMouseY;
 
@@ -358,6 +377,7 @@
 
         // Genel tıklama yakalayıcı: Her komut butonunda, klasörde ve checkbox'ta ışıltıyı saçar
         document.addEventListener('click', (e) => {
+            if (isMobileScreen()) return;
             const folderCard = e.target.closest('.project-card, .project-folder-badge, .filter-tab, .btn-back');
             if (folderCard) {
                 // Klasör ve To-Do kartlarına tıklandığında yoğun saçılarak efektlenen ışıltı

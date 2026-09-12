@@ -1424,10 +1424,20 @@
    MİMARİ PROJE & OFİS ARŞİVİ - MOBİL VE TABLET UYUMLULUK (RESPONSIVE)
    ========================================================== */
 
-/* 1. TABLET VE ORTA EKRANLAR (max-width: 900px) */
-@media (max-width: 900px) {
+/* TABLETLER VE MOBİL CİHAZLAR (max-width: 768px):
+   1. Arka planda göz yoran uçuşan baloncuk ve toz parçacıklarını tamamen gizle.
+   2. Sayfa kenar paylarını ayarla. */
+@media (max-width: 768px) {
+    #sparkle-canvas {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
     body {
-        padding: 20px 24px;
+        padding: 16px 14px;
+        overflow-x: hidden;
     }
 
     #projects-container {
@@ -1436,21 +1446,17 @@
     }
 
     #office-notes-container {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 14px;
-    }
-
-    #modal-content {
-        width: 96%;
-        height: 92vh;
     }
 }
 
-/* 2. AKILLI TELEFONLAR VE KÜÇÜK EKRANLAR (max-width: 600px) */
+/* AKILLI TELEFONLAR (max-width: 600px):
+   Tüm metinleri tek sütun, ferah, geniş ve doğal satır akışına al. */
 @media (max-width: 600px) {
-    /* Genel Gövde ve Tipografi */
     body {
-        padding: 12px 10px;
+        padding: 12px 10px !important;
+        overflow-x: hidden !important;
         -webkit-tap-highlight-color: transparent;
     }
 
@@ -1465,9 +1471,9 @@
 
     /* Üst Bar (Header) */
     header {
-        margin-bottom: 14px;
-        padding-bottom: 12px;
-        gap: 10px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        gap: 8px;
     }
 
     .header-top {
@@ -1481,17 +1487,21 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
 
     h1 {
         font-size: 1.15rem;
         line-height: 1.3;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: break-word;
     }
 
     .network-badge {
         padding: 4px 8px;
         font-size: 0.72rem;
+        flex-shrink: 0;
     }
 
     .header-top-actions {
@@ -1512,16 +1522,17 @@
     .header-buttons {
         width: 100%;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
     }
 
     .btn-main, .btn-secondary {
         width: 100%;
         text-align: center;
         justify-content: center;
-        padding: 11px 16px;
+        padding: 10px 14px;
         font-size: 0.88rem;
-        border-radius: 12px;
+        border-radius: 10px;
+        white-space: normal;
     }
 
     /* Mod Sekmeleri (Ruhsat / Genel Ofis) */
@@ -1529,16 +1540,17 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 6px;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
     }
 
     .mode-tab {
-        padding: 8px 10px;
+        padding: 8px 6px;
         font-size: 0.82rem;
         justify-content: center;
         text-align: center;
-        border-radius: 10px;
-        gap: 5px;
+        border-radius: 8px;
+        gap: 4px;
+        white-space: nowrap;
     }
 
     .mode-tab .icon-svg {
@@ -1550,27 +1562,28 @@
     .filter-bar {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
-        margin-bottom: 14px;
+        gap: 8px;
+        margin-bottom: 12px;
     }
 
     .filter-tabs {
         width: 100%;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         gap: 6px;
     }
 
     .filter-tab {
-        flex: 1;
+        width: 100%;
         text-align: center;
         justify-content: center;
-        padding: 7px 10px;
+        padding: 7px 8px;
         font-size: 0.82rem;
     }
 
     .breadcrumb-bar {
         font-size: 0.95rem;
-        gap: 8px;
+        gap: 6px;
     }
 
     .btn-back {
@@ -1578,280 +1591,413 @@
         font-size: 0.82rem;
     }
 
-    /* Kart Izgaraları (Grid) -> Telefonda Tek Sütun */
+    /* Kart Izgaraları (Grid) -> Telefonda Tek Sütun Tam Genişlik */
     #projects-container {
-        grid-template-columns: 1fr;
-        gap: 12px;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        width: 100% !important;
     }
 
     #office-notes-container {
-        grid-template-columns: 1fr;
-        gap: 10px;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        width: 100% !important;
     }
 
-    .card, .note-card {
-        padding: 14px 12px;
-        border-radius: 12px;
-        min-height: auto;
+    .project-card, .note-card {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 16px 14px !important;
+        min-height: auto !important;
+        position: relative !important;
     }
 
-    .card-title {
-        font-size: 1.05rem;
-        padding-right: 90px;
+    .project-title {
+        font-size: 1.15rem !important;
+        line-height: 1.4 !important;
+        padding-right: 75px !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        margin-bottom: 8px !important;
     }
 
     .note-card-title {
-        font-size: 0.98rem;
-        padding-right: 85px;
+        font-size: 1.05rem !important;
+        line-height: 1.4 !important;
+        padding-right: 95px !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        margin-bottom: 8px !important;
     }
 
-    .card-actions, .note-actions {
-        top: 10px;
-        right: 10px;
-        gap: 4px;
+    .card-top-actions {
+        top: 12px !important;
+        right: 12px !important;
+        gap: 4px !important;
     }
 
-    .card-pip-btn, .card-del, .card-menu-btn, .note-card-pip-btn, .note-card-del {
-        padding: 5px;
+    .note-card-del { right: 10px !important; top: 10px !important; }
+    .note-card-menu-btn { right: 38px !important; top: 10px !important; }
+    .note-card-pip-btn { right: 66px !important; top: 10px !important; }
+
+    .note-card-preview {
+        font-size: 0.9rem !important;
+        line-height: 1.5 !important;
+        white-space: pre-wrap !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        max-height: 160px !important;
+        -webkit-line-clamp: 6 !important;
+    }
+
+    .project-preview {
+        font-size: 0.92rem !important;
+        line-height: 1.45 !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
     }
 
     /* Proje / Görev Modalı -> Telefonda Tam Ekran */
     #modal-overlay {
-        padding: 0;
+        padding: 0 !important;
     }
 
     #modal-content {
-        width: 100vw;
-        height: 100vh;
-        max-width: 100vw;
-        max-height: 100vh;
-        border-radius: 0;
-        border: none;
-        box-shadow: none;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 
     .modal-header {
-        padding: 12px 14px;
-        gap: 8px;
+        padding: 12px 14px !important;
+        gap: 8px !important;
     }
 
     .modal-header-top {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 6px;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 6px !important;
     }
 
     .modal-title-input {
-        width: 100%;
-        font-size: 1.25rem;
+        width: 100% !important;
+        font-size: 1.25rem !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
     }
 
     .modal-header-top-actions {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 6px;
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        gap: 6px !important;
     }
 
     .folder-input-group {
-        width: 100%;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 4px;
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 4px !important;
     }
 
     .folder-input-group label {
-        font-size: 0.78rem;
+        font-size: 0.78rem !important;
     }
 
     .modal-folder-input {
-        width: 100%;
-        box-sizing: border-box;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     /* Sıralama Çubuğu */
     .task-sort-bar {
-        padding: 8px 12px;
-        gap: 4px;
+        padding: 8px 12px !important;
+        gap: 4px !important;
     }
 
     .task-drag-hint {
-        display: none;
+        display: none !important;
     }
 
     .btn-sort {
-        padding: 4px 8px;
-        font-size: 0.72rem;
+        padding: 4px 8px !important;
+        font-size: 0.72rem !important;
     }
 
-    /* Görev Listesi & Görev Maddeleri */
+    /* Görev Listesi & Görev Maddeleri:
+       Mobilde metin dikey sütun olmasın, tam satır genişliği kullansın! */
     .modal-body {
-        padding: 10px 12px;
-        -webkit-overflow-scrolling: touch;
+        padding: 10px 12px !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
     .task-item {
-        padding: 10px 10px;
-        margin-bottom: 8px;
-        border-radius: 8px;
+        padding: 12px !important;
+        margin-bottom: 10px !important;
+        border-radius: 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
 
     .task-main-row {
-        gap: 6px;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .task-drag-handle {
+        display: none !important;
     }
 
     .task-checkbox {
-        transform: scale(1.35);
-        margin: 0 4px;
+        flex-shrink: 0 !important;
+        transform: scale(1.3) !important;
+        margin-top: 3px !important;
+        margin-right: 2px !important;
+    }
+
+    .task-emoji-tag {
+        flex-shrink: 0 !important;
+        margin-top: 2px !important;
+    }
+
+    /* Görev Metnine Checkbox Haricindeki Tüm Satır Genişliğini Ver! */
+    .task-content {
+        flex: 1 1 calc(100% - 48px) !important;
+        min-width: 0 !important;
+        width: calc(100% - 48px) !important;
     }
 
     .task-text {
-        font-size: 0.92rem;
-        line-height: 1.35;
+        font-size: 0.98rem !important;
+        line-height: 1.45 !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        display: block !important;
+        width: 100% !important;
     }
 
-    .task-actions {
-        gap: 4px;
+    /* Aksiyon butonları metnin altına temiz bir satır olarak gelsin */
+    .task-main-row > .task-move-btns,
+    .task-main-row > .btn-task-action {
+        order: 10 !important;
     }
 
-    .task-move-btns {
-        gap: 3px;
+    .task-main-row > .task-move-btns {
+        margin-right: auto !important;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 4px !important;
     }
 
     .btn-move {
-        width: 26px;
-        height: 20px;
+        width: 28px !important;
+        height: 24px !important;
     }
 
-    .btn-task-action {
-        padding: 6px;
+    .task-main-row > .btn-task-action {
+        padding: 5px 8px !important;
+        font-size: 0.78rem !important;
+    }
+
+    /* Alt Görevler (Subtasks) - Mobilde Ferah Satırlar */
+    .subtasks-container {
+        margin-top: 8px !important;
+        width: 100% !important;
+    }
+
+    .subtask-item {
+        margin-left: 6px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+        padding: 8px 10px !important;
+        border-radius: 8px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .subtask-item input[type="checkbox"] {
+        flex-shrink: 0 !important;
+        transform: scale(1.2) !important;
+        margin-top: 2px !important;
+    }
+
+    .subtask-item span[data-hl-target="true"] {
+        flex: 1 1 calc(100% - 42px) !important;
+        min-width: 0 !important;
+        width: calc(100% - 42px) !important;
+        font-size: 0.92rem !important;
+        line-height: 1.4 !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        display: block !important;
+    }
+
+    .subtask-item .task-move-btns,
+    .subtask-item .btn-task-action {
+        order: 10 !important;
+    }
+
+    .subtask-item .task-move-btns {
+        margin-right: auto !important;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 4px !important;
+    }
+
+    .subtask-item .btn-task-action {
+        padding: 4px 6px !important;
+    }
+
+    .modal-subtask-add-row {
+        margin-left: 6px !important;
     }
 
     /* Modal Alt Çubuğu (Yeni Görev Ekle & Butonlar) */
     .modal-footer {
-        padding: 10px 12px;
-        gap: 8px;
+        padding: 10px 12px !important;
+        gap: 8px !important;
     }
 
     .new-task-container {
-        flex-direction: column;
-        gap: 6px;
+        flex-direction: column !important;
+        gap: 6px !important;
     }
 
     .new-task-input {
-        width: 100%;
-        padding: 10px 12px;
-        border-radius: 8px;
+        width: 100% !important;
+        padding: 10px 12px !important;
+        border-radius: 8px !important;
         font-size: 16px !important;
     }
 
     .btn-add {
-        width: 100%;
-        justify-content: center;
-        padding: 9px 14px;
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 9px 14px !important;
     }
 
     .modal-footer-bottom {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        width: 100%;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
     }
 
     .modal-footer-bottom-left {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
     }
 
     .modal-footer-bottom .btn-close {
-        width: 100%;
-        justify-content: center;
-        padding: 10px;
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 10px !important;
     }
 
     /* Not Düzenleme Modalı -> Telefonda Tam Ekran */
     .modal-overlay-note {
-        padding: 0;
+        padding: 0 !important;
     }
 
     .note-modal-box {
-        width: 100vw;
-        height: 100vh;
-        max-width: 100vw;
-        max-height: 100vh;
-        border-radius: 0;
-        border: none;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        border: none !important;
     }
 
     .note-modal-header {
-        padding: 12px 14px;
+        padding: 12px 14px !important;
     }
 
     .note-title-input {
-        font-size: 1.15rem;
+        font-size: 1.15rem !important;
+        white-space: normal !important;
+        word-break: normal !important;
     }
 
     .note-modal-body {
-        padding: 12px 14px;
-        -webkit-overflow-scrolling: touch;
+        padding: 12px 14px !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
     .note-textarea {
-        min-height: 180px;
+        min-height: 180px !important;
         font-size: 16px !important;
-        padding: 10px;
+        line-height: 1.5 !important;
+        padding: 10px !important;
+        white-space: pre-wrap !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
     }
 
     .note-modal-footer {
-        padding: 10px 12px;
-        flex-direction: column;
-        gap: 8px;
-        align-items: stretch;
+        padding: 10px 12px !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        align-items: stretch !important;
     }
 
     .note-modal-footer > div {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
     }
 
     .note-modal-footer .btn {
-        width: 100%;
-        justify-content: center;
+        width: 100% !important;
+        justify-content: center !important;
     }
 
     /* Ortak Ağ ve Supabase Modalı */
     .net-modal-box {
-        width: 95vw;
-        max-height: 92vh;
-        padding: 16px 12px;
-        gap: 12px;
-        border-radius: 12px;
+        width: 95vw !important;
+        max-height: 92vh !important;
+        padding: 16px 12px !important;
+        gap: 12px !important;
+        border-radius: 12px !important;
     }
 
     .net-tabs-header {
-        flex-direction: column;
-        gap: 4px;
+        flex-direction: column !important;
+        gap: 4px !important;
     }
 
     .net-tab-btn {
-        width: 100%;
-        text-align: center;
-        padding: 8px 10px;
+        width: 100% !important;
+        text-align: center !important;
+        padding: 8px 10px !important;
     }
 
     .net-input-field {
         font-size: 16px !important;
-        padding: 10px;
+        padding: 10px !important;
     }
 
     #net-tab-supabase-content button, #net-tab-lan-content button {
-        width: 100%;
-        justify-content: center;
-        text-align: center;
-        padding: 9px 12px;
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 9px 12px !important;
     }
 
     /* Sayfa İçi PiP Widgetı (Telefonda Tam Oturma) */
@@ -1866,13 +2012,14 @@
 
     /* Toast Bildirimleri */
     .toast-notification {
-        bottom: 16px;
-        width: 90%;
-        max-width: 340px;
-        text-align: center;
-        justify-content: center;
-        font-size: 0.82rem;
-        padding: 8px 16px;
+        bottom: 16px !important;
+        width: 90% !important;
+        max-width: 340px !important;
+        text-align: center !important;
+        justify-content: center !important;
+        font-size: 0.82rem !important;
+        padding: 8px 16px !important;
     }
 }
+
 
