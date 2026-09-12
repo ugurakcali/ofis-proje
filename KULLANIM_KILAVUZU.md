@@ -1,49 +1,60 @@
-# 🏢 Mimari Proje & Ofis Görev Arşivi - Çok Kullanıcılı Ağ Kullanım Kılavuzu
+# 🏢 Mimari Proje & Ofis Görev Arşivi - Tam Kurulum ve Kullanım Kılavuzu
 
-Bu sistem, ofisinizdeki tüm çalışma arkadaşlarının **aynı yerel ağ (Wi-Fi veya Ethernet kablosu)** üzerinden eşzamanlı olarak aynı mimari föylere, yapılacaklar listelerine ve ofis notlarına erişmesini sağlar.
+Bu proje artık hem **GitHub Pages** üzerinden internette barındırılabilir, hem **Supabase** bulut veritabanı ile dünyanın her yerinden anlık eşitlenebilir, hem de isterseniz **ofis içi yerel ağda (LAN)** çalıştırılabilir.
 
 ---
 
-## 🚀 1. Sistemi Başlatma (Ana Bilgisayar / Sunucu)
+## ☁️ 1. YOL (ÖNERİLEN): GitHub Pages + Supabase Bulut Veritabanı
 
-1. Proje klasöründeki **`Baslat.bat`** dosyasına çift tıklayın.
-2. Açılan siyah pencere otomatik olarak yerel sunucuyu kurup başlatacak ve varsayılan tarayıcınızda uygulamayı açacaktır:
-   - **Bu Bilgisayardan Giriş:** `http://localhost:3000`
-3. Siyah konsol penceresinde çalışma arkadaşlarınız için ağ linki belirecektir. Örneğin:
+Bu yöntemle ofisteki hiçbir bilgisayarı açık bırakmaya gerek kalmaz. Herkes telefonundan, evinden veya ofisinden aynı linke girip çalışabilir.
+
+### Adım 1: Supabase Projesini Açma (1 Dakika)
+1. [supabase.com](https://supabase.com) adresine gidin ve ücretsiz bir hesap açıp **"New Project"** butonuna basın.
+2. Projeniz açılınca sol menüdeki **"SQL Editor"** sekmesine tıklayın.
+3. Proje klasörünüzdeki [`supabase_setup.sql`](supabase_setup.sql) dosyasının içeriğini kopyalayıp buraya yapıştırın ve sağ alttaki **"Run"** butonuna basın. (Böylece `ofis_data` tablosu ve canlı senkronizasyon otomatik kurulur).
+4. Sol alttaki **Project Settings (Çark simgesi) -> Data API** sayfasına gidin:
+   - **Project URL** (örnek: `https://xxxxxxxxxxxx.supabase.co`)
+   - **anon public API Key** (örnek: `eyJhbGciOi...`)
+   bilgilerini kopyalayın.
+
+### Adım 2: Anahtarları Kaydetme
+* **İster dosya ile:** Proje klasöründeki [`supabase-config.js`](supabase-config.js) dosyasını açıp tırnakların içine yapıştırın.
+* **İster ekrandan:** Uygulamayı açtığınızda sağ üstteki **"Bulut / Ağ Ayarları"** rozetine tıklayın, URL ve Key'i yapıştırıp **"Buluta Bağlan & Kaydet"** deyin.
+
+---
+
+### Adım 3: GitHub'a Yükleme ve GitHub Pages ile Yayına Alma
+1. [github.com](https://github.com) üzerinde oturum açın ve **"New repository"** diyerek yeni bir repo oluşturun (örn: `ofis-proje`, Public olarak seçin).
+2. Bu klasörde bir terminal (PowerShell) açıp şu iki komutu çalıştırın (kendi kullanıcı adınızı ve repo adınızı yazın):
+   ```bash
+   git remote add origin https://github.com/KULLANICI_ADINIZ/REPO_ADINIZ.git
+   git push -u origin main
+   ```
+3. GitHub reponuzun sayfasında **Settings -> Pages** sekmesine gidin:
+   - **Source:** `Deploy from a branch` seçin.
+   - **Branch:** `main` ve `/ (root)` seçip **Save** butonuna tıklayın.
+4. 1-2 dakika içinde size bir web linki verilecektir:
+   ```
+   👉 https://KULLANICI_ADINIZ.github.io/REPO_ADINIZ/
+   ```
+5. Artık ofisteki tüm arkadaşlarınız bu linki tarayıcılarına kaydedip her yerden canlı çalışabilir!
+
+---
+
+## 🏢 2. YOL: Ofis İçi Yerel Ağ (LAN Sunucusu)
+
+İnternet kullanmak istemiyorsanız, sadece ofisteki Wi-Fi/kablo üzerinden çalışmak isterseniz:
+
+1. Ana bilgisayarda [`Baslat.bat`](Baslat.bat) dosyasına çift tıklayın.
+2. Konsolda çıkan linki çalışma arkadaşlarınıza iletin:
    ```
    👉 http://192.168.1.53:3000
    ```
-   *(Pencere açık kaldığı sürece ağdaki herkes bağlanabilir).*
+3. Veriler tamamen ana bilgisayardaki `data/database.json` dosyasında tutulur.
 
 ---
 
-## 👥 2. Çalışma Arkadaşlarınızın Bağlanması
-
-1. Çalışma arkadaşınızın bilgisayarında (veya tablet/telefonunda) tarayıcısını (Chrome, Edge, Firefox vb.) açın.
-2. Adres çubuğuna yukarıdaki linki yazın (örneğin: `http://192.168.1.53:3000`).
-3. Hepsi bu kadar! Herkes anında ortak panoya bağlanır.
-
-> [!TIP]
-> **Hızlı Link Kopyalama:** Uygulamanın sağ üst köşesindeki **🟢 Ağda Canlı** rozetine tıkladığınızda, ofis içi paylaşım linkini tek tıkla kopyalayabileceğiniz bir pencere açılır.
-
----
-
-## ⚡ 3. Canlı (Real-Time) Senkronizasyon Özellikleri
-
-* **Eşzamanlı Düzenleme:** Biri bir projeyi işaretlediğinde, yeni madde eklediğinde, sildiğinde veya not yazdığında, diğer tüm arkadaşların ekranı **sayfayı yenilemeye gerek kalmadan canlı olarak** güncellenir.
-* **Aktif Kullanıcı Sayacı:** Sağ üstteki rozette şu anda ağda kaç kişinin bağlı olduğu anlık olarak görünür (örn. `Ağda Canlı (3 Kullanıcı)`).
-* **Veri Güvenliği ve Yedekleme:** 
-  * Tüm projeler ve notlar ana bilgisayardaki `data/database.json` dosyasında saklanır.
-  * Her kayıtta otomatik olarak `data/database.backup.json` yedeği alınır.
-  * İstenildiği zaman arayüzdeki ağ modalından **"Verileri Yedekle (JSON)"** butonuna basılarak tek tıkla dosya indirilebilir.
-* **Çevrimdışı / Çift Mod:** Eğer sunucu kapalıyken `mymim111.html` doğrudan açılırsa, yerel modda (`localStorage`) çalışmaya devam eder; hiçbir veri kaybolmaz.
-
----
-
-## 🛠️ 4. Sıkça Sorulan Sorular
-
-* **Diğer bilgisayarlar bağlanamıyor, ne yapmalıyım?**
-  * Her iki bilgisayarın da aynı Wi-Fi ya da ofis ağına bağlı olduğundan emin olun.
-  * Windows Güvenlik Duvarı (Firewall) ilk açılışta izin isterse *"Özel ağlarda erişime izin ver"* seçeneğini onaylayın.
-* **Sunucu bilgisayarını değiştirebilir miyiz?**
-  * Evet! `ofis proje` klasörünü yeni bilgisayara kopyalayıp orada `Baslat.bat` çalıştırmanız yeterlidir.
+## ✨ Özellikler ve İpuçları
+* **Canlı Rozet:** Sağ üstteki rozet Supabase'e bağlıyken `🟢 Supabase Bulut Canlı` gösterir.
+* **Always-on-Top PiP:** Görev föylerini AutoCAD/Revit üzerinde mini pencere olarak sabitleyebilirsiniz.
+* **Veri Yedekleme:** İstediğiniz zaman sağ üstteki rozete basıp **"Verileri Yedekle (JSON)"** diyerek tüm panonun yedeğini indirebilirsiniz.
