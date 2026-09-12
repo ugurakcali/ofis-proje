@@ -1,0 +1,329 @@
+/* ===== OFİS NOT VE PROJE KARTLARI ===== */
+        /* ===== GENEL OFİS: NOT DEFTERİ ===== */
+        .office-section-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 4px 0 15px;
+            opacity: 0.85;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #office-notes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+        .note-card {
+            background-color: #fdf6b2;
+            color: #4a4320;
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .note-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.2); }
+        .note-card-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; padding-right: 98px; word-break: break-word; }
+        .note-card-preview {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            flex-grow: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+        .note-folder-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.12);
+            padding: 2px 9px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            align-self: flex-start;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .note-card-date { font-size: 0.7rem; opacity: 0.6; margin-top: 8px; font-weight: 600; }
+        .note-card-del {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(0,0,0,0.1); border: none; border-radius: 50%;
+            width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; opacity: 0.55; transition: all 0.2s; color: inherit;
+        }
+        .note-card-del:hover { opacity: 1; background: rgba(220, 60, 60, 0.25); color: #c0392b; }
+        .note-card-menu-btn {
+            position: absolute; top: 10px; right: 40px;
+            background: rgba(0,0,0,0.1); border: none; border-radius: 50%;
+            width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; opacity: 0.55; transition: all 0.2s; color: inherit;
+        }
+        .note-card-menu-btn:hover { opacity: 1; background: rgba(0,0,0,0.2); }
+        .note-card-pip-btn {
+            position: absolute; top: 10px; right: 70px;
+            background: rgba(0,0,0,0.1); border: none; border-radius: 50%;
+            width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; opacity: 0.55; transition: all 0.2s; color: inherit;
+        }
+        .note-card-pip-btn:hover { opacity: 1; transform: scale(1.15); background: rgba(0,0,0,0.25); }
+
+/* ===== PROJE KARTLARI VE GRİD ===== */
+        .note-subnotes-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            opacity: 0.75;
+            margin-bottom: 8px;
+        }
+        #note-subnotes-container { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+        .note-subnote-item {
+            display: flex; align-items: flex-start; gap: 8px;
+            background: rgba(0,0,0,0.06);
+            border: 1px solid rgba(128,128,128,0.2);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+        .note-subnote-item span { flex-grow: 1; white-space: pre-wrap; word-break: break-word; cursor: text; }
+        .note-subnote-del {
+            background: rgba(0,0,0,0.1); border: none; border-radius: 50%;
+            width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; opacity: 0.6; transition: all 0.2s; color: inherit; flex-shrink: 0;
+        }
+        .note-subnote-del:hover { opacity: 1; background: rgba(220, 60, 60, 0.25); color: #c0392b; }
+        .note-subnote-add-row { display: flex; gap: 8px; }
+        .note-subnote-input {
+            flex-grow: 1;
+            background: rgba(0,0,0,0.06); border: 1px solid rgba(128,128,128,0.25);
+            border-radius: 8px; padding: 8px 10px; color: inherit; font-size: 0.88rem;
+            outline: none; font-family: inherit;
+        }
+        .note-subnote-input:focus { border-color: var(--primary-accent); }
+
+        .breadcrumb-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .btn-back {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-light);
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        
+        .btn-back:hover {
+            background-color: var(--border-light);
+            transform: translateX(-3px);
+        }
+
+        .icon-svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        .icon-sm { width: 15px; height: 15px; }
+
+        .btn-theme {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-light);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-theme:hover {
+            transform: scale(1.08);
+            background-color: var(--border-light);
+        }
+
+        .color-input-hidden {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            transition: background 0.15s;
+        }
+        .card-menu-item:hover { background: rgba(128,128,128,0.25); }
+        .card-menu-item.danger:hover { background: rgba(220, 60, 60, 0.25); color: #ff6b6b; }
+        .card-menu-sep { height: 1px; background: rgba(128,128,128,0.25); margin: 4px 2px; }
+
+        .card-top-actions {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 10;
+        }
+
+        .card-pip-btn {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+/* ===== KART 3 NOKTA MENÜ POPOVER ===== */
+            background: rgba(0, 0, 0, 0.15);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            align-self: flex-start;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .project-preview {
+            font-size: 0.95rem;
+            flex-grow: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .project-card-date {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            font-weight: 600;
+            margin-top: auto;
+            padding-top: 6px;
+        }
+
+        .card-menu-btn {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.75;
+            transition: all 0.2s;
+        }
+        .card-menu-btn:hover { opacity: 1; background: rgba(0, 0, 0, 0.2); }
+
+        .card-menu-popover {
+            position: fixed;
+            display: none;
+            flex-direction: column;
+            min-width: 210px;
+            background: #202124;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+
+/* ===== GLITTER FRAME & KENAR IŞILTISI ===== */
+        /* ===== ÇERÇEVE / KENAR IŞILTISI (SPARKLE FRAME) =====
+           Kartların, modalın ve PiP penceresinin kenarlarında sürekli
+           yanıp sönen ince bir simli ışıltı çerçevesi oluşturur. */
+        .glitter-frame,
+        #modal-content,
+        #floating-pip-widget {
+            position: relative;
+        }
+
+        .glitter-frame::before,
+        #modal-content::before,
+        #floating-pip-widget::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 0 8px 1px rgba(255,255,255,0.1);
+            animation: frameEdgeGlow 3.2s ease-in-out infinite;
+        }
+
+        .glitter-frame::after,
+        #modal-content::after,
+        #floating-pip-widget::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 1;
+            background:
+                radial-gradient(circle 1.3px at 1.5% 6%, #fff 0 55%, transparent 60%),
+                radial-gradient(circle 1.1px at 98.5% 10%, #fff 0 55%, transparent 60%),
+                radial-gradient(circle 1.6px at 97% 94%, #fff 0 55%, transparent 60%),
+                radial-gradient(circle 1.2px at 2% 92%, #fff 0 55%, transparent 60%),
+                radial-gradient(circle 1.3px at 50% 1.5%, #fff 0 55%, transparent 60%),
+                radial-gradient(circle 1.1px at 1% 50%, #fff 0 55%, transparent 60%),
+                radial-gradient(circle 1.3px at 99% 55%, #fff 0 55%, transparent 60%),
+                radial-gradient(circle 1.5px at 55% 98.5%, #fff 0 55%, transparent 60%);
+            mix-blend-mode: screen;
+            animation: frameCornerTwinkle 2.4s ease-in-out infinite;
+        }
+
+        .glitter-frame::after { animation-delay: 0.35s; }
+        #floating-pip-widget::after { animation-delay: 0.7s; }
+
+        @keyframes frameEdgeGlow {
+            0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.14), 0 0 8px 1px rgba(255,255,255,0.1); }
+            50% { box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 0 16px 3px rgba(255,255,255,0.3); }
+        }
+
+        @keyframes frameCornerTwinkle {
+            0%, 100% { opacity: 0.3; }
+            30% { opacity: 0.95; }
+            60% { opacity: 0.45; }
+            80% { opacity: 1; }
+        }
+
+        /* ===== AĞ DURUMU ROZETİ & PAYLAŞIM MODALI ===== */
