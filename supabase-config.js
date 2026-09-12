@@ -1,11 +1,7 @@
 // ==========================================================
 // SUPABASE BULUT VERİTABANI YAPILANDIRMASI
 // ==========================================================
-// Project URL'niz otomatik olarak tanımlanmıştır.
-// anonKey bilginizi buraya yazabilir veya arayüzdeki
-// "Ortak Ağ & Bulut Ayarları" penceresinden yapıştırabilirsiniz.
-
 window.SUPABASE_CONFIG = {
     url: 'https://jdetgszdqfggbpnqidps.supabase.co',
-    anonKey: ''  // Supabase -> Project Settings -> API sayfasındaki "anon public" anahtarını buraya yapıştırın
+    anonKey: 'sb_publishable_0vu5rHnISUfAZ06gdUj9JA_k0TfyT1z'
 };
