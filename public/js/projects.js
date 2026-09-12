@@ -270,10 +270,25 @@ function createRuhsatProject(metadata, customTemplate) {
                 } catch (e) { console.error('Ruhsat migration error:', e); }
             }
 
-            // Proje yoksa veya sadece eski 5 maddelik taslak varsa 131 maddelik föy ile başlat
-            const isOldDummyProject = projects && projects.length === 1 && projects[0].tasks && projects[0].tasks.length === 5 && projects[0].tasks[0].text === 'KAT PLANLARINA SIVALAR';
-            if (!projects || projects.length === 0 || isOldDummyProject) {
+            // Projeler arasında eski 5 maddelik taslak varsa her birini 131 maddelik föye dönüştür
+            let hasUpgraded = false;
+            if (projects && projects.length > 0) {
+                projects.forEach((p, idx) => {
+                    const isOldDummy = p.tasks && p.tasks.length === 5 && p.tasks[0].text === 'KAT PLANLARINA SIVALAR';
+                    if (isOldDummy) {
+                        projects[idx] = createRuhsatProject(p.metadata);
+                        hasUpgraded = true;
+                    }
+                    if (p.title && (p.title.includes('Ruhsat') || p.title.includes('Föy'))) {
+                        p.isRuhsat = true;
+                    }
+                });
+            }
+            if (!projects || projects.length === 0) {
                 projects = [createRuhsatProject()];
+                hasUpgraded = true;
+            }
+            if (hasUpgraded) {
                 saveProjects();
             }
             renderProjects();
@@ -312,6 +327,18 @@ function createRuhsatProject(metadata, customTemplate) {
             const itemsToRender = currentViewFolder 
                 ? activeProjects.filter(p => (p.folder || '').trim() === currentViewFolder)
                 : activeProjects.filter(p => { let f = (p.folder || '').trim(); return f === '' || f === 'Ana Ekran'; });
+
+            if (itemsToRender.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: rgba(0,0,0,0.02); border: 2px dashed var(--border-color); border-radius: 12px; margin-top: 10px;">
+                        <div style="font-size: 2.2rem; margin-bottom: 12px;">🏛️</div>
+                        <h3 style="font-size: 1.15rem; margin-bottom: 8px;">${appMode === 'ruhsat' ? 'Henüz Ruhsat / İmar Föyü Bulunmuyor' : 'Henüz Proje veya To-Do Bulunmuyor'}</h3>
+                        <p style="opacity: 0.75; font-size: 0.9rem; margin-bottom: 16px;">${appMode === 'ruhsat' ? '131 maddelik ve 12 bölümlü Kepez Belediyesi & PAİY kontrol listesini oluşturmak için butona tıklayın.' : 'Yeni bir liste eklemek için butona tıklayın.'}</p>
+                        <button class="btn-main" onclick="${appMode === 'ruhsat' ? 'createNewProject(\'full\')' : 'createNewProject(\'blank\', \'ofis\')'}">+ ${appMode === 'ruhsat' ? 'Yeni Ruhsat / İmar Föyü Ekle' : 'Yeni To-Do Ekle'}</button>
+                    </div>
+                `;
+                return;
+            }
 
             itemsToRender.sort((a, b) => (a.isPinned !== b.isPinned ? (a.isPinned ? -1 : 1) : b.id - a.id));
 
@@ -361,12 +388,24 @@ function createRuhsatProject(metadata, customTemplate) {
                             <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><rect x="11" y="9" width="9" height="7" rx="1" ry="1" fill="currentColor"></rect></svg>
                         </button>
                     </div>
-                    <div class="project-title">${project.title}${project.isPinned ? ' 📌' : ''}</div>
+                    <div class="project-title">${project.isRuhsat ? '🏛️ ' : ''}${project.title}${project.isPinned ? ' 📌' : ''}</div>
+                    ${project.isRuhsat ? `
+                        <div style="display:flex; flex-wrap:wrap; gap:6px; margin: 4px 0 8px 0; font-size:0.75rem;">
+                            <span style="background:rgba(46,125,50,0.18); font-weight:700; padding:2px 8px; border-radius:4px;">12 Bölüm · 131 Kriter</span>
+                            ${project.metadata?.mimar ? `<span style="background:rgba(0,0,0,0.08); padding:2px 6px; border-radius:4px;">Mimar: ${escapeHtml(project.metadata.mimar)}</span>` : ''}
+                        </div>
+                    ` : ''}
                     <div class="project-folder-badge" onclick="event.stopPropagation(); openFolderOrHome('${(project.folder || 'Ana Ekran').replace(/'/g, "\\'")}')" style="cursor:pointer;" title="Bu klasörü aç">
                         <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
                         ${project.folder || 'Ana Ekran'}
                     </div>
                     <div class="project-preview">${previewHtml}</div>
+                    ${project.isRuhsat ? `
+                        <div style="margin-top:10px; padding:6px 8px; background:rgba(0,0,0,0.08); border-radius:6px; font-size:0.78rem; font-weight:600; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
+                            <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                            131 Maddelik Kontrol Listesini Aç
+                        </div>
+                    ` : ''}
                     <div class="project-card-date">${project.createdAt ? ('Oluşturma: ' + project.createdAt) : ''}${project.updatedAt ? (project.createdAt ? ' · Güncelleme: ' : 'Güncelleme: ') + project.updatedAt : ''}</div>
                 `;
                 container.appendChild(card);

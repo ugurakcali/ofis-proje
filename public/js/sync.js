@@ -96,6 +96,12 @@
 
                 if (data && Array.isArray(data.projects) && data.projects.length > 0) {
                     projects = data.projects;
+                    projects.forEach((p, idx) => {
+                        const isDummy = p.tasks && p.tasks.length === 5 && p.tasks[0].text === 'KAT PLANLARINA SIVALAR';
+                        if (isDummy && typeof createRuhsatProject === 'function') {
+                            projects[idx] = createRuhsatProject(p.metadata);
+                        }
+                    });
                     officeNotes = Array.isArray(data.office_notes) ? data.office_notes : [];
                     localStorage.setItem('mimzProjects', JSON.stringify(projects));
                     localStorage.setItem('mimzOfficeNotes', JSON.stringify(officeNotes));
@@ -114,6 +120,12 @@
                     .on('postgres_changes', { event: '*', schema: 'public', table: 'ofis_data' }, (payload) => {
                         if (payload.new && payload.new.projects) {
                             projects = payload.new.projects;
+                            projects.forEach((p, idx) => {
+                                const isDummy = p.tasks && p.tasks.length === 5 && p.tasks[0].text === 'KAT PLANLARINA SIVALAR';
+                                if (isDummy && typeof createRuhsatProject === 'function') {
+                                    projects[idx] = createRuhsatProject(p.metadata);
+                                }
+                            });
                             officeNotes = payload.new.office_notes || [];
                             localStorage.setItem('mimzProjects', JSON.stringify(projects));
                             localStorage.setItem('mimzOfficeNotes', JSON.stringify(officeNotes));
