@@ -564,9 +564,11 @@
                 const subCount = task.subtasks ? task.subtasks.length : 0;
                 const subDone = task.subtasks ? task.subtasks.filter(s => s.completed).length : 0;
                 
-                const drawerKey = `${project.id}-${index}`;
+                const drawerKey = `${project.id}-${task.id || index}`;
                 // Alt görevler varsa veya kullanıcı açtıysa açık tut
-                const isExpanded = pipDrawerOpenMap.has(drawerKey) ? pipDrawerOpenMap.get(drawerKey) : (subCount > 0);
+                const isExpanded = pipDrawerOpenMap.has(drawerKey) 
+                    ? pipDrawerOpenMap.get(drawerKey) 
+                    : (pipDrawerOpenMap.has(`${project.id}-${index}`) ? pipDrawerOpenMap.get(`${project.id}-${index}`) : (subCount > 0));
 
                 let subItemsHtml = '';
                 if (subCount > 0) {
@@ -689,10 +691,19 @@
                 if (counterBtn) {
                     counterBtn.onclick = (e) => {
                         e.stopPropagation();
-                        const key = `${project.id}-${index}`;
-                        const currentlyOpen = pipDrawerOpenMap.has(key) ? pipDrawerOpenMap.get(key) : (subCount > 0);
-                        pipDrawerOpenMap.set(key, !currentlyOpen);
-                        renderPipContent();
+                        const key = `${project.id}-${task.id || index}`;
+                        const currentlyOpen = pipDrawerOpenMap.has(key) 
+                            ? pipDrawerOpenMap.get(key) 
+                            : (pipDrawerOpenMap.has(`${project.id}-${index}`) ? pipDrawerOpenMap.get(`${project.id}-${index}`) : (subCount > 0));
+                        const nextState = !currentlyOpen;
+                        pipDrawerOpenMap.set(key, nextState);
+                        pipDrawerOpenMap.set(`${project.id}-${index}`, nextState);
+                        
+                        const drawer = card.querySelector('.pip-subtasks-drawer');
+                        if (drawer) {
+                            drawer.classList.toggle('expanded', nextState);
+                        }
+                        counterBtn.innerHTML = `${nextState ? '▾' : '▸'} ${subDone}/${subCount} alt`;
                     };
                 }
 
@@ -701,6 +712,8 @@
                 if (addSubBtn) {
                     addSubBtn.onclick = (e) => {
                         e.stopPropagation();
+                        const key = `${project.id}-${task.id || index}`;
+                        pipDrawerOpenMap.set(key, true);
                         pipDrawerOpenMap.set(`${project.id}-${index}`, true);
                         renderPipContent();
                         setTimeout(() => {

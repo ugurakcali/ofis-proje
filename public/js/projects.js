@@ -221,6 +221,7 @@ function initProjects() {
         }
 
         function openModal(projectId) {
+            modalSubtaskAdderOpen.clear();
             currentEditingProjectId = projectId;
             const project = projects.find(p => p.id === projectId);
             if (!project) return;
@@ -271,6 +272,7 @@ function initProjects() {
             }
             document.getElementById('modal-overlay').style.display = 'none';
             currentEditingProjectId = null;
+            modalSubtaskAdderOpen.clear();
         }
 
         function resetProjectColor() { applyProjectColor('#85b88f'); }
@@ -369,14 +371,24 @@ function initProjects() {
             saveProjects();
 
             // Eklenen görevin çekmecesini açık tut
+            const task = project.tasks[taskIndex];
+            const key = `${project.id}-${task.id || taskIndex}`;
+            pipDrawerOpenMap.set(key, true);
             pipDrawerOpenMap.set(`${project.id}-${taskIndex}`, true);
-            modalSubtaskAdderOpen.add(taskIndex);
+            modalSubtaskAdderOpen.delete(taskIndex);
 
             refreshAllViews();
             showToast("Alt görev eklendi.");
         }
 
         function openModalSubtaskAdder(index) {
+            const project = projects.find(p => p.id === currentEditingProjectId);
+            if (project && project.tasks && project.tasks[index]) {
+                const task = project.tasks[index];
+                const key = `${project.id}-${task.id || index}`;
+                pipDrawerOpenMap.set(key, true);
+                pipDrawerOpenMap.set(`${project.id}-${index}`, true);
+            }
             modalSubtaskAdderOpen.add(index);
             renderTasks();
             setTimeout(() => {
@@ -387,12 +399,66 @@ function initProjects() {
 
         // Ana ekrandaki to-do'larda alt görevleri gizle/göster
         function toggleModalSubtaskDrawer(index, btnEl) {
-            const project = getActiveProject(btnEl);
-            if (!project) return;
-            const key = `${project.id}-${index}`;
-            const currentlyOpen = pipDrawerOpenMap.has(key) ? pipDrawerOpenMap.get(key) : true;
-            pipDrawerOpenMap.set(key, !currentlyOpen);
+            const project = projects.find(p => p.id === currentEditingProjectId) || getActiveProject(btnEl);
+            if (!project || !project.tasks || !project.tasks[index]) return;
+            const task = project.tasks[index];
+            const key = `${project.id}-${task.id || index}`;
+            const currentlyOpen = pipDrawerOpenMap.has(key) 
+                ? pipDrawerOpenMap.get(key) 
+                : (pipDrawerOpenMap.has(`${project.id}-${index}`) ? pipDrawerOpenMap.get(`${project.id}-${index}`) : true);
+            const nextState = !currentlyOpen;
+            pipDrawerOpenMap.set(key, nextState);
+            pipDrawerOpenMap.set(`${project.id}-${index}`, nextState);
+            modalSubtaskAdderOpen.delete(index);
+
+            // DOM üzerinde anlık ve akıcı geçiş
+            const taskEl = btnEl ? btnEl.closest('.task-item') : document.querySelector(`.task-item[data-index="${index}"]`);
+            if (taskEl) {
+                const container = taskEl.querySelector('.subtasks-container');
+                const chevron = btnEl ? btnEl.querySelector('svg') : taskEl.querySelector('.sub-toggle svg');
+                if (container) {
+                    container.classList.toggle('expanded', nextState);
+                }
+                if (chevron) {
+                    chevron.style.transform = `rotate(${nextState ? '0' : '-90'}deg)`;
+                }
+            } else {
+                renderTasks();
+            }
+        }
+
+        // Tüm alt görevleri tek tıkla topluca aç/kapat
+        function toggleAllModalSubtasks() {
+            const project = projects.find(p => p.id === currentEditingProjectId);
+            if (!project || !project.tasks) return;
+
+            const tasksWithSub = project.tasks.map((t, idx) => ({ t, idx })).filter(({ t }) => t.subtasks && t.subtasks.length > 0);
+            if (tasksWithSub.length === 0) {
+                showToast("Bu projede henüz alt madde bulunmuyor.", "info");
+                return;
+            }
+
+            let openCount = 0;
+            tasksWithSub.forEach(({ t, idx }) => {
+                const key = `${project.id}-${t.id || idx}`;
+                const isOpen = pipDrawerOpenMap.has(key) 
+                    ? pipDrawerOpenMap.get(key) 
+                    : (pipDrawerOpenMap.has(`${project.id}-${idx}`) ? pipDrawerOpenMap.get(`${project.id}-${idx}`) : true);
+                if (isOpen) openCount++;
+            });
+
+            // Herhangi biri açıksa hepsini daralt (gizle); hepsi kapalıysa hepsini aç (göster)
+            const nextState = openCount === 0;
+
+            tasksWithSub.forEach(({ t, idx }) => {
+                const key = `${project.id}-${t.id || idx}`;
+                pipDrawerOpenMap.set(key, nextState);
+                pipDrawerOpenMap.set(`${project.id}-${idx}`, nextState);
+                modalSubtaskAdderOpen.delete(idx);
+            });
+
             renderTasks();
+            showToast(nextState ? "Tüm alt maddeler gösterildi." : "Tüm alt maddeler gizlendi.", "info");
         }
 
         function handleAddSubtask(index, inputEl) {
@@ -400,6 +466,7 @@ function initProjects() {
             const text = inputEl.value.trim();
             addSubtask(index, text, inputEl);
             inputEl.value = '';
+            modalSubtaskAdderOpen.delete(index);
             setTimeout(() => {
                 const nextInp = document.getElementById(`modal-sub-input-${index}`);
                 if (nextInp) nextInp.focus();
@@ -518,10 +585,12 @@ function initProjects() {
                 const isAdderOpen = modalSubtaskAdderOpen.has(index);
                 const subCount = hasSubtasks ? task.subtasks.length : 0;
                 const subDone = hasSubtasks ? task.subtasks.filter(s => s.completed).length : 0;
-                const drawerKey = `${project.id}-${index}`;
-                // Alt görevler kullanıcı tarafından gizlenmediyse (veya daha önce hiç dokunulmadıysa) açık başlar
-                const isDrawerOpenStored = pipDrawerOpenMap.has(drawerKey) ? pipDrawerOpenMap.get(drawerKey) : true;
-                const isExpanded = isAdderOpen ? true : isDrawerOpenStored;
+                const drawerKey = `${project.id}-${task.id || index}`;
+                // Alt görevler kullanıcı tarafından gizlenmediyse açık başlar
+                const isDrawerOpenStored = pipDrawerOpenMap.has(drawerKey) 
+                    ? pipDrawerOpenMap.get(drawerKey) 
+                    : (pipDrawerOpenMap.has(`${project.id}-${index}`) ? pipDrawerOpenMap.get(`${project.id}-${index}`) : true);
+                const isExpanded = isDrawerOpenStored;
 
                 let subHtml = '';
                 if (hasSubtasks || isAdderOpen) {
@@ -1069,7 +1138,7 @@ function initProjects() {
                         <button class="btn-ruhsat-filter ${ruhsatActiveFilter === 'all' ? 'active' : ''}" onclick="setRuhsatFilter('all')">Tümü (${totalCriteria})</button>
                         <button class="btn-ruhsat-filter ${ruhsatActiveFilter === 'incomplete' ? 'active' : ''}" onclick="setRuhsatFilter('incomplete')">Eksik Kalanlar (${totalCriteria - doneCriteria})</button>
                         <button class="btn-ruhsat-filter ${ruhsatActiveFilter === 'completed' ? 'active' : ''}" onclick="setRuhsatFilter('completed')">Tamamlananlar (${doneCriteria})</button>
-                        <button class="btn-ruhsat-filter" onclick="toggleAllRuhsatSections()" title="Tüm bölümleri aç veya daralt">Aç / Kapat</button>
+                        <button class="btn-ruhsat-filter" onclick="toggleAllRuhsatSections()" title="Tüm bölümleri aç veya daralt">${ruhsatCollapsedSections.size >= (project.tasks?.length || 12) ? 'Tümünü Aç' : 'Tümünü Kapat'}</button>
                     </div>
                     <div class="ruhsat-progress-badge">
                         İlerleme: %${totalPct} (${doneCriteria} / ${totalCriteria})
@@ -1331,6 +1400,7 @@ function initProjects() {
         }
 
         function toggleRuhsatSectionCollapse(sIdx) {
+            sIdx = Number(sIdx);
             if (ruhsatCollapsedSections.has(sIdx)) {
                 ruhsatCollapsedSections.delete(sIdx);
             } else {
@@ -1340,15 +1410,26 @@ function initProjects() {
             if (secCard) {
                 secCard.classList.toggle('collapsed', ruhsatCollapsedSections.has(sIdx));
             }
+            // Buton etiketini güncelle
+            const allBtn = document.querySelector('.ruhsat-filter-group button[onclick="toggleAllRuhsatSections()"]');
+            if (allBtn) {
+                const project = projects.find(p => p.id === currentEditingProjectId);
+                const total = project && project.tasks ? project.tasks.length : 12;
+                allBtn.textContent = ruhsatCollapsedSections.size >= total ? 'Tümünü Aç' : 'Tümünü Kapat';
+            }
         }
 
         function toggleAllRuhsatSections() {
             const project = projects.find(p => p.id === currentEditingProjectId);
             if (!project || !project.tasks) return;
-            if (ruhsatCollapsedSections.size >= project.tasks.length / 2) {
+            const total = project.tasks.length;
+            const allCollapsed = ruhsatCollapsedSections.size >= total;
+            if (allCollapsed) {
                 ruhsatCollapsedSections.clear();
+                showToast("Tüm bölümler genişletildi.", "info");
             } else {
-                project.tasks.forEach((_, idx) => ruhsatCollapsedSections.add(idx));
+                project.tasks.forEach((_, idx) => ruhsatCollapsedSections.add(Number(idx)));
+                showToast("Tüm bölümler daraltıldı.", "info");
             }
             renderRuhsatChecklist(project, document.getElementById('modal-tasks-container'));
         }
