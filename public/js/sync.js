@@ -83,7 +83,7 @@
                 }
                 supabaseClient = window.supabase.createClient(url, key);
 
-                // İlk veriyi çek
+                // İlk veriyi çek (Projeler ve Notlar)
                 const { data, error } = await supabaseClient
                     .from('ofis_data')
                     .select('*')
@@ -105,10 +105,34 @@
                     officeNotes = Array.isArray(data.office_notes) ? data.office_notes : [];
                     localStorage.setItem('mimzProjects', JSON.stringify(projects));
                     localStorage.setItem('mimzOfficeNotes', JSON.stringify(officeNotes));
-                    refreshAllViews();
                 } else {
                     await uploadLocalDataToSupabase(false);
                 }
+
+                // Buluttaki Özel Klasörleri çek
+                try {
+                    const { data: folderData } = await supabaseClient
+                        .from('ofis_data')
+                        .select('*')
+                        .eq('id', 'folders')
+                        .single();
+
+                    if (folderData && Array.isArray(folderData.projects)) {
+                        folderData.projects.forEach(f => {
+                            const tr = (f || '').trim();
+                            if (tr && !customFolders.includes(tr)) customFolders.push(tr);
+                        });
+                        localStorage.setItem('mimzCustomFolders', JSON.stringify(customFolders));
+                    }
+                } catch (fErr) {
+                    console.warn('Supabase klasör çekme uyarısı:', fErr);
+                }
+
+                if (typeof extractAndRegisterKnownFolders === 'function') {
+                    extractAndRegisterKnownFolders(false);
+                }
+                refreshAllViews();
+                if (typeof renderOfficeNotes === 'function') renderOfficeNotes();
 
                 // Canlı Realtime Aboneliği Başlat
                 if (supabaseChannel) {
@@ -118,7 +142,8 @@
                 supabaseChannel = supabaseClient
                     .channel('public:ofis_data')
                     .on('postgres_changes', { event: '*', schema: 'public', table: 'ofis_data' }, (payload) => {
-                        if (payload.new && payload.new.projects) {
+                        if (!payload.new) return;
+                        if (payload.new.id === 'main' && payload.new.projects) {
                             projects = payload.new.projects;
                             projects.forEach((p, idx) => {
                                 const isDummy = p.tasks && p.tasks.length === 5 && p.tasks[0].text === 'KAT PLANLARINA SIVALAR';
@@ -129,8 +154,21 @@
                             officeNotes = payload.new.office_notes || [];
                             localStorage.setItem('mimzProjects', JSON.stringify(projects));
                             localStorage.setItem('mimzOfficeNotes', JSON.stringify(officeNotes));
+                            if (typeof extractAndRegisterKnownFolders === 'function') {
+                                extractAndRegisterKnownFolders(false);
+                            }
                             refreshAllViews();
+                            if (typeof renderOfficeNotes === 'function') renderOfficeNotes();
                             showToast('Bulut: Veriler anlık eşitlendi.', 'info');
+                        } else if (payload.new.id === 'folders' && Array.isArray(payload.new.projects)) {
+                            customFolders = payload.new.projects;
+                            localStorage.setItem('mimzCustomFolders', JSON.stringify(customFolders));
+                            if (typeof extractAndRegisterKnownFolders === 'function') {
+                                extractAndRegisterKnownFolders(false);
+                            }
+                            refreshAllViews();
+                            if (typeof renderOfficeNotes === 'function') renderOfficeNotes();
+                            showToast('Bulut: Klasörler anlık eşitlendi.', 'info');
                         }
                     })
                     .subscribe((status) => {
@@ -199,10 +237,19 @@
                         updated_at: new Date().toISOString()
                     });
 
+                await supabaseClient
+                    .from('ofis_data')
+                    .upsert({
+                        id: 'folders',
+                        projects: customFolders,
+                        office_notes: [],
+                        updated_at: new Date().toISOString()
+                    });
+
                 if (error) {
                     alert('Yükleme hatası: ' + error.message + '\n\nİpucu: Supabase SQL Editor alanında supabase_setup.sql kodunu çalıştırdığınızdan emin olun.');
                 } else {
-                    showToast('✅ Yerel veriler Supabase bulutuna yüklendi!', 'info');
+                    showToast('✅ Yerel veriler ve klasörler Supabase bulutuna yüklendi!', 'info');
                 }
             } catch (e) {
                 alert('Hata: ' + e.message);
@@ -246,10 +293,22 @@
                         .then(({ error }) => {
                             if (error) console.error('Supabase kaydetme hatası:', error.message);
                         });
+
+                    supabaseClient
+                        .from('ofis_data')
+                        .upsert({
+                            id: 'folders',
+                            projects: customFolders,
+                            office_notes: [],
+                            updated_at: new Date().toISOString()
+                        })
+                        .then(({ error }) => {
+                            if (error) console.error('Supabase klasör kaydetme hatası:', error.message);
+                        });
                 }
 
                 if (isServerHosted) {
-                    const payload = { projects, officeNotes };
+                    const payload = { projects, officeNotes, customFolders };
                     if (syncWs && syncWs.readyState === WebSocket.OPEN) {
                         syncWs.send(JSON.stringify({
                             type: 'SAVE_STATE',
@@ -263,6 +322,7 @@
                             body: JSON.stringify({
                                 projects: projects,
                                 officeNotes: officeNotes,
+                                customFolders: customFolders,
                                 senderId: myClientId
                             })
                         }).catch(() => {});
@@ -322,18 +382,34 @@
                             checkLocalStorageMigration(msg.data);
                             projects = msg.data.projects;
                             officeNotes = Array.isArray(msg.data.officeNotes) ? msg.data.officeNotes : [];
+                            if (Array.isArray(msg.data.customFolders)) {
+                                customFolders = msg.data.customFolders;
+                                localStorage.setItem('mimzCustomFolders', JSON.stringify(customFolders));
+                            }
                             localStorage.setItem('mimzProjects', JSON.stringify(projects));
                             localStorage.setItem('mimzOfficeNotes', JSON.stringify(officeNotes));
+                            if (typeof extractAndRegisterKnownFolders === 'function') {
+                                extractAndRegisterKnownFolders(false);
+                            }
                             refreshAllViews();
+                            if (typeof renderOfficeNotes === 'function') renderOfficeNotes();
                         }
                     } else if (msg.type === 'REMOTE_UPDATE') {
                         if (msg.senderId === myClientId) return;
                         if (msg.data) {
                             projects = msg.data.projects || [];
                             officeNotes = msg.data.officeNotes || [];
+                            if (Array.isArray(msg.data.customFolders)) {
+                                customFolders = msg.data.customFolders;
+                                localStorage.setItem('mimzCustomFolders', JSON.stringify(customFolders));
+                            }
                             localStorage.setItem('mimzProjects', JSON.stringify(projects));
                             localStorage.setItem('mimzOfficeNotes', JSON.stringify(officeNotes));
+                            if (typeof extractAndRegisterKnownFolders === 'function') {
+                                extractAndRegisterKnownFolders(false);
+                            }
                             refreshAllViews();
+                            if (typeof renderOfficeNotes === 'function') renderOfficeNotes();
                             showToast('Ortak Çalışma: Ekip arkadaşınız değişiklik yaptı.', 'info');
                         }
                     } else if (msg.type === 'CLIENT_COUNT') {

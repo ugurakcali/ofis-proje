@@ -576,7 +576,33 @@ function escapeHtml(text) {
         .replace(/'/g, '&#039;');
 }
 
+function extractAndRegisterKnownFolders(triggerSync = true) {
+    let changed = false;
+    (projects || []).forEach(p => {
+        const f = (p.folder || '').trim();
+        if (f && f !== 'Ana Ekran' && !customFolders.includes(f)) {
+            customFolders.push(f);
+            changed = true;
+        }
+    });
+    (officeNotes || []).forEach(n => {
+        const f = (n.folder || '').trim();
+        if (f && f !== 'Ana Ekran' && !customFolders.includes(f)) {
+            customFolders.push(f);
+            changed = true;
+        }
+    });
+    if (changed) {
+        localStorage.setItem('mimzCustomFolders', JSON.stringify(customFolders));
+        if (triggerSync && typeof notifyServerStateChange === 'function') {
+            notifyServerStateChange();
+        }
+    }
+    return changed;
+}
+
 function getAllKnownFolders() {
+    extractAndRegisterKnownFolders(false);
     const set = new Set();
     (customFolders || []).forEach(f => {
         const tr = (f || '').trim();

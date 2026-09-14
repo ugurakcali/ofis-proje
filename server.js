@@ -35,6 +35,7 @@ function getDefaultData() {
     return {
         projects: [],
         officeNotes: [],
+        customFolders: [],
         lastUpdated: Date.now()
     };
 }
@@ -47,6 +48,7 @@ function loadDatabase() {
             const parsed = JSON.parse(raw);
             if (parsed && Array.isArray(parsed.projects)) {
                 if (!Array.isArray(parsed.officeNotes)) parsed.officeNotes = [];
+                if (!Array.isArray(parsed.customFolders)) parsed.customFolders = [];
                 return parsed;
             }
         }
@@ -148,13 +150,14 @@ app.get('/api/data', (req, res) => {
 
 // API: Veri kaydet ve yayınla
 app.post('/api/save', (req, res) => {
-    const { projects, officeNotes, senderId } = req.body;
+    const { projects, officeNotes, customFolders, senderId } = req.body;
     if (!Array.isArray(projects) || !Array.isArray(officeNotes)) {
         return res.status(400).json({ success: false, message: 'Geçersiz veri formatı.' });
     }
 
     currentData.projects = projects;
     currentData.officeNotes = officeNotes;
+    if (Array.isArray(customFolders)) currentData.customFolders = customFolders;
     currentData.lastUpdated = Date.now();
     saveDatabase(currentData);
 
@@ -166,11 +169,12 @@ app.post('/api/save', (req, res) => {
 
 // API: İstemcinin yerel verisini aktar (Migrate)
 app.post('/api/migrate', (req, res) => {
-    const { projects, officeNotes, force } = req.body;
+    const { projects, officeNotes, customFolders, force } = req.body;
     // Eğer sunucu veritabanı boşsa ya da force istenmişse içeri al
     if (force || currentData.projects.length <= 1) {
         if (Array.isArray(projects) && projects.length > 0) currentData.projects = projects;
         if (Array.isArray(officeNotes) && officeNotes.length > 0) currentData.officeNotes = officeNotes;
+        if (Array.isArray(customFolders) && customFolders.length > 0) currentData.customFolders = customFolders;
         currentData.lastUpdated = Date.now();
         saveDatabase(currentData);
         broadcastUpdate();
@@ -199,6 +203,7 @@ function broadcastUpdate(excludeSenderId = null) {
         data: {
             projects: currentData.projects,
             officeNotes: currentData.officeNotes,
+            customFolders: currentData.customFolders || [],
             lastUpdated: currentData.lastUpdated
         }
     });
@@ -223,6 +228,7 @@ wss.on('connection', (ws, req) => {
         data: {
             projects: currentData.projects,
             officeNotes: currentData.officeNotes,
+            customFolders: currentData.customFolders || [],
             lastUpdated: currentData.lastUpdated
         }
     }));
@@ -236,6 +242,7 @@ wss.on('connection', (ws, req) => {
                 if (parsed.data) {
                     if (Array.isArray(parsed.data.projects)) currentData.projects = parsed.data.projects;
                     if (Array.isArray(parsed.data.officeNotes)) currentData.officeNotes = parsed.data.officeNotes;
+                    if (Array.isArray(parsed.data.customFolders)) currentData.customFolders = parsed.data.customFolders;
                     currentData.lastUpdated = Date.now();
                     saveDatabase(currentData);
                     broadcastUpdate(parsed.clientId);
