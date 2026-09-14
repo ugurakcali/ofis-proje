@@ -255,8 +255,21 @@
         // Kalıcı toz ışıltısı animasyonunu hemen başlat
         startSparkleLoopIfNeeded();
 
+        function isWritingModalOpen() {
+            const pModal = document.getElementById('modal-overlay');
+            if (pModal && pModal.style.display === 'flex') return true;
+            const nModal = document.getElementById('note-modal-overlay');
+            if (nModal && nModal.style.display === 'flex') return true;
+            const netModal = document.getElementById('network-modal-overlay');
+            if (netModal && netModal.style.display === 'flex') return true;
+            return false;
+        }
+
         /* 1. MOUSE GEZİNDİKÇE BEYAZ SİMLİ IŞILTI (MOUSE TRAIL) */
         window.addEventListener('mousemove', (e) => {
+            if (isWritingModalOpen() || (e.target && e.target.closest && e.target.closest('#modal-content, .note-modal-box, .net-modal-box'))) {
+                return;
+            }
             lastMouseX = e.clientX;
             lastMouseY = e.clientY;
             const now = performance.now();
@@ -283,6 +296,9 @@
 
         window.addEventListener('touchmove', (e) => {
             if (isMobileScreen()) return;
+            if (isWritingModalOpen() || (e.target && e.target.closest && e.target.closest('#modal-content, .note-modal-box, .net-modal-box'))) {
+                return;
+            }
             if (e.touches && e.touches[0]) {
                 const t = e.touches[0];
                 lastMouseX = t.clientX;
@@ -358,6 +374,7 @@
         // Herhangi bir komut/işlem tetiklendiğinde ışıltıyı çevreye dağıtır
         function triggerSparkleBurstOnAction(source = null) {
             if (isMobileScreen()) return;
+            if (typeof isWritingModalOpen === 'function' && isWritingModalOpen()) return;
             let burstX = lastMouseX;
             let burstY = lastMouseY;
 
@@ -378,7 +395,11 @@
         // Genel tıklama yakalayıcı: Her komut butonunda, klasörde ve checkbox'ta ışıltıyı saçar
         document.addEventListener('click', (e) => {
             if (isMobileScreen()) return;
-            const folderCard = e.target.closest('.project-card, .project-folder-badge, .filter-tab, .btn-back');
+            // Yazı yazma ve düzenleme modalları içinde ışıltı patlatma (yazı okumayı engellememek için)
+            if ((typeof isWritingModalOpen === 'function' && isWritingModalOpen()) || e.target.closest('#modal-content, .note-modal-box, .net-modal-box')) {
+                return;
+            }
+            const folderCard = e.target.closest('.project-card, .project-folder-badge, .filter-tab, .btn-back, .desktop-folder-card');
             if (folderCard) {
                 // Klasör ve To-Do kartlarına tıklandığında yoğun saçılarak efektlenen ışıltı
                 triggerSparkleBurst(e.clientX, e.clientY, 36, { burstSpeed: 5.2 });
