@@ -79,30 +79,132 @@ function initProjects() {
                         Ana Ekran
                     </button>
                     <span>/</span>
-                    <span style="color: var(--primary-accent);">${currentViewFolder}</span>
+                    <span style="color: var(--primary-accent); font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+                        ${escapeHtml(currentViewFolder)}
+                    </span>
+                    <div class="breadcrumb-folder-actions">
+                        <button class="btn-breadcrumb-action" onclick="promptRenameFolder('${escapeHtml(currentViewFolder)}')" title="Klasör Adını Değiştir">✏️ Yeniden Adlandır</button>
+                        <button class="btn-breadcrumb-action" onclick="exportFolderToPdf('${escapeHtml(currentViewFolder)}')" title="Bu Klasördeki Dosyaları PDF Olarak Kaydet">📄 PDF</button>
+                        <button class="btn-breadcrumb-action" onclick="exportFolderToTxt('${escapeHtml(currentViewFolder)}')" title="Bu Klasördeki Dosyaları TXT Olarak İndir">📝 TXT</button>
+                        <button class="btn-breadcrumb-action danger" onclick="promptDeleteFolder('${escapeHtml(currentViewFolder)}')" title="Klasörü Sil">🗑️ Sil</button>
+                    </div>
                 `;
             } else {
                 breadcrumb.innerHTML = `
                     <span style="display:flex; align-items:center; gap:6px;">
                         <svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
-                        Ana Ekran
+                        Ana Ekran (Masaüstü)
                     </span>
                 `;
+            }
+
+            // 1. MASAÜSTÜ KLASÖRLERİ BÖLÜMÜ (Yalnızca Ana Ekrandayken gösterilir)
+            if (!currentViewFolder) {
+                const knownFolders = getAllKnownFolders();
+                const foldersSection = document.createElement('div');
+                foldersSection.className = 'desktop-folders-container';
+                foldersSection.innerHTML = `
+                    <div class="desktop-folders-header">
+                        <div class="desktop-folders-title">
+                            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+                            Masaüstü Klasörleri <span class="folders-count-badge">(${knownFolders.length})</span>
+                        </div>
+                        <button class="btn-create-folder-inline" onclick="promptCreateNewFolder()" title="Yeni Klasör Oluştur">
+                            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                            + Yeni Klasör
+                        </button>
+                    </div>
+                `;
+
+                const foldersGrid = document.createElement('div');
+                foldersGrid.className = 'desktop-folders-grid';
+
+                if (knownFolders.length === 0) {
+                    foldersGrid.innerHTML = `
+                        <div class="empty-folders-hint" onclick="promptCreateNewFolder()">
+                            📁 Henüz özel klasör yok. Buraya veya "+ Yeni Klasör" butonuna tıklayarak ilk klasörünüzü oluşturabilirsiniz.
+                        </div>
+                    `;
+                } else {
+                    knownFolders.forEach(f => {
+                        const pCount = projects.filter(p => (p.folder || '').trim() === f && (currentTab === 'active' ? !p.isArchived : p.isArchived)).length;
+                        const nCount = officeNotes.filter(n => (n.folder || '').trim() === f && (currentTab === 'active' ? !n.isArchived : n.isArchived)).length;
+                        const totalCount = pCount + nCount;
+
+                        const folderCard = document.createElement('div');
+                        folderCard.className = 'desktop-folder-card glitter-frame';
+                        folderCard.title = `'${f}' klasörünü açmak için tıklayın. Dosya taşımak için kartı buraya sürükleyebilirsiniz.`;
+                        folderCard.onclick = () => openFolder(f);
+                        folderCard.ondragover = (e) => handleFolderDragOver(e);
+                        folderCard.ondragleave = (e) => handleFolderDragLeave(e);
+                        folderCard.ondrop = (e) => handleFolderDrop(f, e);
+
+                        folderCard.innerHTML = `
+                            <div class="folder-card-top">
+                                <div class="folder-card-icon">
+                                    <svg viewBox="0 0 24 24" class="folder-svg-icon"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+                                </div>
+                                <button class="folder-card-menu-btn" onclick="event.stopPropagation(); toggleFolderMenu('${escapeHtml(f)}', this, event)" title="Klasör İşlemleri">
+                                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                                </button>
+                            </div>
+                            <div class="folder-card-name">${escapeHtml(f)}</div>
+                            <div class="folder-card-count">${totalCount} dosya${pCount > 0 && nCount > 0 ? ` (${pCount} proje, ${nCount} not)` : ''}</div>
+                        `;
+                        foldersGrid.appendChild(folderCard);
+                    });
+                }
+                foldersSection.appendChild(foldersGrid);
+                container.appendChild(foldersSection);
+
+                // Ana Ekran Dosyaları Başlığı
+                const filesHeader = document.createElement('div');
+                filesHeader.className = 'desktop-files-header';
+                filesHeader.innerHTML = `
+                    <div class="desktop-files-title">
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        ${appMode === 'ruhsat' ? 'Ana Ekrandaki Ruhsat ve İmar Föyleri' : 'Ana Ekrandaki To-Do Projeleri'}
+                    </div>
+                `;
+                container.appendChild(filesHeader);
             }
 
             const itemsToRender = currentViewFolder 
                 ? activeProjects.filter(p => (p.folder || '').trim() === currentViewFolder)
                 : activeProjects.filter(p => { let f = (p.folder || '').trim(); return f === '' || f === 'Ana Ekran'; });
 
+            const projectsGrid = document.createElement('div');
+            projectsGrid.className = 'projects-grid-inner';
+
             if (itemsToRender.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: rgba(0,0,0,0.02); border: 2px dashed var(--border-color); border-radius: 12px; margin-top: 10px;">
+                const emptyDiv = document.createElement('div');
+                emptyDiv.style.gridColumn = '1 / -1';
+                emptyDiv.style.textAlign = 'center';
+                emptyDiv.style.padding = '40px 20px';
+                emptyDiv.style.background = 'rgba(0,0,0,0.02)';
+                emptyDiv.style.border = '2px dashed var(--border-color)';
+                emptyDiv.style.borderRadius = '12px';
+                emptyDiv.style.marginTop = '10px';
+
+                if (currentViewFolder) {
+                    emptyDiv.innerHTML = `
+                        <div style="font-size: 2.2rem; margin-bottom: 12px;">📁</div>
+                        <h3 style="font-size: 1.15rem; margin-bottom: 8px;">"${escapeHtml(currentViewFolder)}" Klasörü Henüz Boş</h3>
+                        <p style="opacity: 0.75; font-size: 0.9rem; margin-bottom: 16px;">Bu klasörün içine doğrudan yeni bir liste eklemek için aşağıdaki butona tıklayın veya ana ekrandaki dosyaları buraya sürükleyin / taşıyın.</p>
+                        <button class="btn-main" onclick="${appMode === 'ruhsat' ? 'createNewProject(\'full\')' : 'createNewProject(\'blank\', \'ofis\')'}">+ Bu Klasöre ${appMode === 'ruhsat' ? 'Yeni Ruhsat Föyü Ekle' : 'Yeni To-Do Ekle'}</button>
+                    `;
+                } else {
+                    emptyDiv.innerHTML = `
                         <div style="font-size: 2.2rem; margin-bottom: 12px;">🏛️</div>
-                        <h3 style="font-size: 1.15rem; margin-bottom: 8px;">${appMode === 'ruhsat' ? 'Henüz Ruhsat / İmar Föyü Bulunmuyor' : 'Henüz Proje veya To-Do Bulunmuyor'}</h3>
-                        <p style="opacity: 0.75; font-size: 0.9rem; margin-bottom: 16px;">${appMode === 'ruhsat' ? '131 maddelik ve 12 bölümlü Kepez Belediyesi & PAİY kontrol listesini oluşturmak için butona tıklayın.' : 'Yeni bir liste eklemek için butona tıklayın.'}</p>
+                        <h3 style="font-size: 1.15rem; margin-bottom: 8px;">${appMode === 'ruhsat' ? 'Ana Ekranda Ruhsat / İmar Föyü Bulunmuyor' : 'Ana Ekranda Proje veya To-Do Bulunmuyor'}</h3>
+                        <p style="opacity: 0.75; font-size: 0.9rem; margin-bottom: 16px;">${getAllKnownFolders().length > 0 ? 'Mevcut dosyalarınız yukarıdaki klasörlerin içinde yer alıyor olabilir. Ana ekrana yeni bir dosya eklemek için butona tıklayın.' : (appMode === 'ruhsat' ? '131 maddelik ve 12 bölümlü Kepez Belediyesi & PAİY kontrol listesini oluşturmak için butona tıklayın.' : 'Yeni bir liste eklemek için butona tıklayın.')}</p>
                         <button class="btn-main" onclick="${appMode === 'ruhsat' ? 'createNewProject(\'full\')' : 'createNewProject(\'blank\', \'ofis\')'}">+ ${appMode === 'ruhsat' ? 'Yeni Ruhsat / İmar Föyü Ekle' : 'Yeni To-Do Ekle'}</button>
-                    </div>
-                `;
+                    `;
+                }
+                projectsGrid.appendChild(emptyDiv);
+                container.appendChild(projectsGrid);
+                if (currentPipProjectId) renderPipContent();
                 return;
             }
 
@@ -111,6 +213,9 @@ function initProjects() {
             itemsToRender.forEach(project => {
                 const card = document.createElement('div');
                 card.className = 'project-card glitter-frame';
+                card.draggable = true;
+                card.ondragstart = (e) => handleProjectDragStart(e, project.id);
+
                 if (project.color) {
                     card.style.backgroundColor = project.color;
                     const contrastText = getContrastColor(project.color);
@@ -147,7 +252,7 @@ function initProjects() {
 
                 card.innerHTML = `
                     <div class="card-top-actions">
-                        <button class="card-menu-btn" onclick="toggleCardMenu('project', ${project.id}, this, event)" title="Klasöre Taşı / Arşivle / Sil">
+                        <button class="card-menu-btn" onclick="toggleCardMenu('project', ${project.id}, this, event)" title="Klasöre Taşı / Arşivle / Sil / Dışa Aktar">
                             <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
                         </button>
                         <button class="card-pip-btn" onclick="openFloatingPip(${project.id}, event)" title="Tüm Uygulamaların Üstünde Tut (Masaüstü PiP)">
@@ -174,9 +279,10 @@ function initProjects() {
                     ` : ''}
                     <div class="project-card-date">${project.createdAt ? ('Oluşturma: ' + project.createdAt) : ''}${project.updatedAt ? (project.createdAt ? ' · Güncelleme: ' : 'Güncelleme: ') + project.updatedAt : ''}</div>
                 `;
-                container.appendChild(card);
+                projectsGrid.appendChild(card);
             });
 
+            container.appendChild(projectsGrid);
             if (currentPipProjectId) renderPipContent();
         }
 
@@ -227,6 +333,7 @@ function initProjects() {
             if (!project) return;
             document.getElementById('modal-title').value = project.title;
             document.getElementById('modal-folder').value = project.folder || '';
+            updateFolderDatalist();
             const modalContent = document.getElementById('modal-content');
             
             const sortBar = document.querySelector('.task-sort-bar');
@@ -265,6 +372,11 @@ function initProjects() {
                         recordState();
                         project.title = newT;
                         project.folder = newF;
+                        if (newF !== 'Ana Ekran' && !customFolders.includes(newF)) {
+                            customFolders.push(newF);
+                            saveCustomFolders();
+                        }
+                        project.updatedAt = getFormattedDate();
                         saveProjects();
                         renderProjects();
                     }
@@ -646,13 +758,13 @@ function initProjects() {
                             </button>
                         </div>
                         <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index}, this)">
-                        ${task.emoji ? `<span class="task-emoji-tag" title="Görev Emojisi">${task.emoji}</span>` : ''}
+                        ${task.emoji ? renderTaskIcon(task.emoji) : ''}
                         <div class="task-content">
                             <span class="task-text ${task.completed ? 'completed' : ''}" data-hl-target="true" data-hl-type="task" data-hl-task-idx="${index}" ondblclick="startInlineEdit(${index}, null, this)" title="Çift tıklayarak düzenleyebilirsiniz">${task.text}</span>
                         </div>
                         
-                        <button class="btn-task-action emoji btn-task-emoji" onclick="toggleEmojiPicker(${index}, this, event)" title="Göreve Emoji Ekle / Değiştir">
-                            ${task.emoji ? task.emoji : `<svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="9" r="0.9" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="0.9" fill="currentColor" stroke="none"/></svg>`}
+                        <button class="btn-task-action emoji btn-task-emoji" onclick="toggleEmojiPicker(${index}, this, event)" title="Göreve İkon Ekle / Değiştir">
+                            ${task.emoji ? renderTaskIcon(task.emoji) : `<svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2"/><circle cx="9" cy="9" r="0.9" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="0.9" fill="currentColor" stroke="none"/></svg>`}
                         </button>
                         <button class="btn-task-action add-sub" onclick="openModalSubtaskAdder(${index})" title="Bu maddeye alt görev ekle">
                             <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -693,8 +805,7 @@ function initProjects() {
             });
         }
 
-        /* ===== GÖREV EMOJİSİ SEÇİCİ ===== */
-        const taskEmojiOptions = ['♡','☆','◇','♧','♤','😀','😁','😂','🙂','😉','😍','😎','🤔','😴','😢','😡','🤯','👍','👎','👏','🙏','🔥','⭐','✅','❌','⚠️','📌','💡','🎯','🏗️','📐','🧱','🏠','📅','⏰','💰','📞'];
+        /* ===== GÖREV İKONU SEÇİCİ (TRANSPARAN BUZLU CAM VE ÇİZGİSEL İKONLAR) ===== */
         let emojiPickerTargetIndex = null;
         let emojiPickerContextEl = null;
 
@@ -703,22 +814,44 @@ function initProjects() {
             const el = document.createElement('div');
             el.id = 'emoji-picker-popover';
             el.className = 'emoji-picker-popover';
-            taskEmojiOptions.forEach(em => {
+
+            const header = document.createElement('div');
+            header.className = 'emoji-picker-header';
+            header.innerHTML = `
+                <div class="emoji-picker-title">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    Çizgisel İkon Seçin
+                </div>
+                <div class="emoji-picker-sub">36 Teknik &amp; Mimari İkon</div>
+            `;
+            el.appendChild(header);
+
+            const grid = document.createElement('div');
+            grid.className = 'emoji-picker-grid';
+
+            Object.keys(LINE_ICONS).forEach(key => {
+                const item = LINE_ICONS[key];
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = 'emoji-pick-btn';
-                btn.textContent = em;
+                btn.className = 'emoji-pick-btn line-icon-btn';
+                btn.title = item.label;
+                btn.innerHTML = item.svg;
                 btn.onclick = (e) => {
                     e.stopPropagation();
-                    pickTaskEmoji(emojiPickerTargetIndex, em, emojiPickerContextEl);
+                    pickTaskEmoji(emojiPickerTargetIndex, key, emojiPickerContextEl);
                     closeEmojiPicker();
                 };
-                el.appendChild(btn);
+                grid.appendChild(btn);
             });
+            el.appendChild(grid);
+
             const clearBtn = document.createElement('button');
             clearBtn.type = 'button';
             clearBtn.className = 'emoji-pick-clear';
-            clearBtn.textContent = 'Emojiyi Kaldır';
+            clearBtn.innerHTML = `
+                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                <span>İkonu Kaldır</span>
+            `;
             clearBtn.onclick = (e) => {
                 e.stopPropagation();
                 pickTaskEmoji(emojiPickerTargetIndex, '', emojiPickerContextEl);
@@ -742,8 +875,8 @@ function initProjects() {
             const rect = btnEl.getBoundingClientRect();
             popover.classList.add('show');
             popover.style.visibility = 'hidden';
-            const pw = popover.offsetWidth || 264;
-            const ph = popover.offsetHeight || 150;
+            const pw = 280;
+            const ph = popover.offsetHeight || 290;
             let top = rect.bottom + 6;
             let left = rect.left;
             if (top + ph > window.innerHeight - 10) top = rect.top - ph - 6;
@@ -890,16 +1023,224 @@ function initProjects() {
             }
         }
 
-        /* ===== KART 3 NOKTA MENÜSÜ (KLASÖRE TAŞI / ANA EKRAN / ARŞİV / SİL) ===== */
+        /* ===== DRAG & DROP DOSYA TAŞIMA VE MASAÜSTÜ KLASÖR MOTORU ===== */
+        var draggedItemInfo = null;
+
+        function handleProjectDragStart(event, projectId) {
+            draggedItemInfo = { type: 'project', id: projectId };
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', JSON.stringify(draggedItemInfo));
+        }
+
+        function handleNoteDragStart(event, noteId) {
+            draggedItemInfo = { type: 'note', id: noteId };
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', JSON.stringify(draggedItemInfo));
+        }
+
+        function handleFolderDragOver(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+            const card = event.currentTarget;
+            if (card) card.classList.add('drag-hover');
+        }
+
+        function handleFolderDragLeave(event) {
+            const card = event.currentTarget;
+            if (card) card.classList.remove('drag-hover');
+        }
+
+        function handleFolderDrop(targetFolder, event) {
+            event.preventDefault();
+            const card = event.currentTarget;
+            if (card) card.classList.remove('drag-hover');
+            if (!draggedItemInfo) return;
+
+            if (draggedItemInfo.type === 'project') {
+                const proj = projects.find(p => p.id === draggedItemInfo.id);
+                if (proj) {
+                    recordState();
+                    proj.folder = targetFolder;
+                    proj.updatedAt = getFormattedDate();
+                    saveProjects();
+                    showToast(`"${proj.title}" -> "${targetFolder}" klasörüne taşındı.`);
+                    refreshAllViews();
+                }
+            } else if (draggedItemInfo.type === 'note') {
+                const note = officeNotes.find(n => n.id === draggedItemInfo.id);
+                if (note) {
+                    note.folder = targetFolder;
+                    note.updatedAt = getFormattedDate();
+                    saveOfficeNotes();
+                    showToast(`"${note.title}" -> "${targetFolder}" klasörüne taşındı.`);
+                    refreshAllViews();
+                    if (typeof renderOfficeNotes === 'function') renderOfficeNotes();
+                }
+            }
+            draggedItemInfo = null;
+        }
+
+        function promptCreateNewFolder() {
+            const name = prompt("Oluşturmak istediğiniz yeni klasörün adını girin (Örn: Ruhsatlar, Şantiye, Belediye İşleri):");
+            if (name === null) return;
+            const trimmed = name.trim();
+            if (!trimmed) { showToast("Klasör adı boş bırakılamaz.", "info"); return; }
+            if (trimmed === "Ana Ekran") { showToast("Bu isim sistem tarafından kullanılmaktadır.", "info"); return; }
+            createCustomFolder(trimmed);
+        }
+
+        function promptRenameFolder(oldName) {
+            const name = prompt(`"${oldName}" klasörünün yeni adını girin:`, oldName);
+            if (name === null) return;
+            const trimmed = name.trim();
+            if (!trimmed || trimmed === oldName) return;
+            renameCustomFolder(oldName, trimmed);
+        }
+
+        function promptDeleteFolder(folderName) {
+            const hasFiles = projects.some(p => (p.folder || '').trim() === folderName) || officeNotes.some(n => (n.folder || '').trim() === folderName);
+            let msg = `"${folderName}" klasörünü silmek istediğinize emin misiniz?`;
+            if (hasFiles) {
+                msg += `\n\nNot: Klasörün içindeki dosyalar silinmeyecek, güvenle 'Ana Ekran'a aktarılacaktır.`;
+            }
+            if (!confirm(msg)) return;
+            deleteCustomFolder(folderName, true);
+        }
+
+        function exportFolderToPdf(folderName) {
+            const folderProjects = projects.filter(p => (p.folder || '').trim() === folderName);
+            const folderNotes = officeNotes.filter(n => (n.folder || '').trim() === folderName);
+            if (folderProjects.length === 0 && folderNotes.length === 0) {
+                showToast("Bu klasörde dışa aktarılacak dosya yok.", "info");
+                return;
+            }
+            let html = `
+                <div class="report-header">
+                    <div>
+                        <h1 class="report-title">📁 Klasör: ${escapeHtml(folderName)}</h1>
+                        <p style="margin:4px 0 0 0; font-size:10pt; color:#475569;">Klasör Raporu ve Çıktısı</p>
+                    </div>
+                    <div class="report-meta">
+                        <div><b>Tarih:</b> ${new Date().toLocaleString('tr-TR')}</div>
+                        <div><b>Toplam Proje:</b> ${folderProjects.length}</div>
+                        <div><b>Toplam Not:</b> ${folderNotes.length}</div>
+                    </div>
+                </div>
+            `;
+            folderProjects.forEach((p, idx) => {
+                if (idx > 0) html += `<div class="page-break"></div>`;
+                html += formatProjectToPdfHtml(p);
+            });
+            if (folderNotes.length > 0) {
+                if (folderProjects.length > 0) html += `<div class="page-break"></div>`;
+                html += `<h2 style="font-size:14pt; color:#9a3412; border-bottom:1.5px solid #cbd5e1; padding-bottom:6px; margin-top:20px;">OFİS NOTLARI</h2>`;
+                folderNotes.forEach(n => { html += formatNoteToPdfHtml(n); });
+            }
+            printHtmlContent(`${folderName} Klasörü Raporu`, html);
+        }
+
+        function exportFolderToTxt(folderName) {
+            const folderProjects = projects.filter(p => (p.folder || '').trim() === folderName);
+            const folderNotes = officeNotes.filter(n => (n.folder || '').trim() === folderName);
+            if (folderProjects.length === 0 && folderNotes.length === 0) {
+                showToast("Bu klasörde dışa aktarılacak dosya yok.", "info");
+                return;
+            }
+            let out = [];
+            out.push(`MİMZ OFİS - KLASÖR DIŞA AKTARIMI: ${folderName}`);
+            out.push(`Tarih: ${new Date().toLocaleString('tr-TR')}`);
+            out.push(`Toplam Proje: ${folderProjects.length} | Toplam Not: ${folderNotes.length}\n`);
+            folderProjects.forEach(p => { out.push(formatProjectToTxt(p)); });
+            folderNotes.forEach(n => { out.push(formatNoteToTxt(n)); });
+            downloadTxtFile(`${folderName.replace(/[/\\?%*:|"<>]/g, '_')}_arsiv.txt`, out.join('\n'));
+        }
+
+        var activeMenuFolder = null;
+        function buildFolderMenuPopover() {
+            if (document.getElementById('folder-menu-popover')) return;
+            const el = document.createElement('div');
+            el.id = 'folder-menu-popover';
+            el.className = 'card-menu-popover';
+            el.addEventListener('mousedown', e => e.stopPropagation());
+            document.body.appendChild(el);
+        }
+
+        function toggleFolderMenu(folderName, btnEl, event) {
+            if (event) event.stopPropagation();
+            buildFolderMenuPopover();
+            const popover = document.getElementById('folder-menu-popover');
+            if (popover.classList.contains('show') && activeMenuFolder === folderName) {
+                closeFolderMenu();
+                return;
+            }
+            activeMenuFolder = folderName;
+            popover.innerHTML = `
+                <button class="card-menu-item" onclick="closeFolderMenu(); openFolder('${escapeHtml(folderName)}')">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+                    Klasörü Aç
+                </button>
+                <button class="card-menu-item" onclick="closeFolderMenu(); promptRenameFolder('${escapeHtml(folderName)}')">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                    Yeniden Adlandır...
+                </button>
+                <div class="card-menu-sep"></div>
+                <button class="card-menu-item" onclick="closeFolderMenu(); exportFolderToPdf('${escapeHtml(folderName)}')">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    Klasörü PDF Olarak Kaydet
+                </button>
+                <button class="card-menu-item" onclick="closeFolderMenu(); exportFolderToTxt('${escapeHtml(folderName)}')">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Klasörü TXT Olarak İndir
+                </button>
+                <div class="card-menu-sep"></div>
+                <button class="card-menu-item danger" onclick="closeFolderMenu(); promptDeleteFolder('${escapeHtml(folderName)}')">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                    Klasörü Sil
+                </button>
+            `;
+            const rect = btnEl.getBoundingClientRect();
+            popover.classList.add('show');
+            popover.style.visibility = 'hidden';
+            const pw = popover.offsetWidth || 210;
+            const ph = popover.offsetHeight || 190;
+            let top = rect.bottom + 6;
+            let left = rect.left;
+            if (top + ph > window.innerHeight - 10) top = rect.top - ph - 6;
+            if (left + pw > window.innerWidth - 10) left = window.innerWidth - pw - 10;
+            if (left < 10) left = 10;
+            popover.style.top = `${top}px`;
+            popover.style.left = `${left}px`;
+            popover.style.visibility = 'visible';
+        }
+
+        function closeFolderMenu() {
+            const popover = document.getElementById('folder-menu-popover');
+            if (popover) popover.classList.remove('show');
+            activeMenuFolder = null;
+        }
+
+        window.addEventListener('mousedown', (e) => {
+            const popover = document.getElementById('folder-menu-popover');
+            if (popover && popover.classList.contains('show') && !e.target.closest('#folder-menu-popover') && !e.target.closest('.folder-card-menu-btn')) {
+                closeFolderMenu();
+            }
+        });
+
+        function updateFolderDatalist() {
+            const datalist = document.getElementById('folder-suggestions');
+            if (!datalist) return;
+            datalist.innerHTML = '';
+            const known = getAllKnownFolders();
+            known.forEach(f => {
+                const opt = document.createElement('option');
+                opt.value = f;
+                datalist.appendChild(opt);
+            });
+        }
+
+        /* ===== KART 3 NOKTA MENÜSÜ (KLASÖRE TAŞI / ANA EKRAN / PDF / TXT / ARŞİV / SİL) ===== */
         var cardMenuTargetType = null;
         var cardMenuTargetId = null;
-
-        function getAllKnownFolders() {
-            const set = new Set();
-            projects.forEach(p => { const f = (p.folder || '').trim(); if (f && f !== 'Ana Ekran') set.add(f); });
-            officeNotes.forEach(n => { const f = (n.folder || '').trim(); if (f && f !== 'Ana Ekran') set.add(f); });
-            return Array.from(set).sort((a, b) => a.localeCompare(b, 'tr'));
-        }
 
         function buildCardMenuPopover() {
             if (document.getElementById('card-menu-popover')) return;
@@ -917,6 +1258,24 @@ function initProjects() {
             if (!id) return;
             if (type === 'project') openFloatingPip(id);
             else openFloatingPipNote(id);
+        }
+
+        function cardMenuExportPdf() {
+            const type = cardMenuTargetType;
+            const id = cardMenuTargetId;
+            closeCardMenu();
+            if (!id) return;
+            if (type === 'project') exportProjectToPdf(id);
+            else exportNoteToPdf(id);
+        }
+
+        function cardMenuExportTxt() {
+            const type = cardMenuTargetType;
+            const id = cardMenuTargetId;
+            closeCardMenu();
+            if (!id) return;
+            if (type === 'project') exportProjectToTxt(id);
+            else exportNoteToTxt(id);
         }
 
         function toggleCardMenu(type, id, btnEl, event) {
@@ -947,11 +1306,20 @@ function initProjects() {
                     <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
                     Ana Ekrana Taşı
                 </button>
+                <div class="card-menu-sep"></div>
+                <button class="card-menu-item" onclick="cardMenuExportPdf()">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    PDF Olarak Kaydet
+                </button>
+                <button class="card-menu-item" onclick="cardMenuExportTxt()">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    TXT Olarak İndir
+                </button>
+                <div class="card-menu-sep"></div>
                 <button class="card-menu-item" onclick="cardMenuTogglePin()">
                     <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1Z"/></svg>
                     ${item.isPinned ? 'Sabitlemeyi Kaldır' : 'Sabitle'}
                 </button>
-                <div class="card-menu-sep"></div>
                 <button class="card-menu-item" onclick="cardMenuToggleArchive()">
                     <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
                     ${item.isArchived ? 'Arşivden Çıkar' : 'Arşivle'}
@@ -967,7 +1335,7 @@ function initProjects() {
             popover.classList.add('show');
             popover.style.visibility = 'hidden';
             const pw = popover.offsetWidth || 210;
-            const ph = popover.offsetHeight || 200;
+            const ph = popover.offsetHeight || 230;
             let top = rect.bottom + 6;
             let left = rect.left;
             if (top + ph > window.innerHeight - 10) top = rect.top - ph - 6;
@@ -1006,17 +1374,22 @@ function initProjects() {
             const item = cardMenuGetItem();
             if (!item) return;
             const known = getAllKnownFolders();
-            const hint = known.length ? `\n\nMevcut klasörler: ${known.join(', ')}` : '';
+            const hint = known.length ? `\n\nMevcut Klasörler:\n• ${known.join('\n• ')}\n\n(Yukarıdaki listeden birini yazabilir veya yeni bir klasör adı girebilirsiniz)` : '\n\nHenüz klasör oluşturulmadı. Yeni bir klasör adı girebilirsiniz.';
             const current = (item.folder || '').trim();
             const target = prompt('Bu öğeyi hangi klasöre taşımak istersiniz?' + hint, current && current !== 'Ana Ekran' ? current : '');
             if (target === null) { closeCardMenu(); return; }
             const trimmed = target.trim();
-            item.folder = trimmed ? trimmed : 'Ana Ekran';
+            const dest = trimmed ? trimmed : 'Ana Ekran';
+            item.folder = dest;
+            if (dest !== 'Ana Ekran' && !customFolders.includes(dest)) {
+                customFolders.push(dest);
+                saveCustomFolders();
+            }
             if (cardMenuTargetType === 'project') item.updatedAt = getFormattedDate();
             else item.updatedAt = getFormattedDate();
             cardMenuSaveAndRefresh();
             closeCardMenu();
-            showToast('Klasör güncellendi.');
+            showToast(`"${dest}" klasörüne taşındı.`);
         }
 
         function cardMenuMoveHome() {

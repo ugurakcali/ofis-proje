@@ -772,49 +772,114 @@
         .emoji-picker-popover {
             position: fixed;
             display: none;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 3px;
-            background: #202124;
+            flex-direction: column;
+            background: rgba(26, 28, 32, 0.88);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 14px;
-            padding: 10px;
-            width: 264px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 16px;
+            padding: 12px;
+            width: 280px;
+            box-sizing: border-box;
             z-index: 1000000;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             user-select: none;
         }
-        .emoji-picker-popover.show { display: grid; }
-        body.light-mode .emoji-picker-popover { background: #ffffff; color: #202124; border-color: rgba(0,0,0,0.2); box-shadow: 0 12px 35px rgba(0,0,0,0.25); }
+        .emoji-picker-popover.show { display: flex; }
+        body.light-mode .emoji-picker-popover {
+            background: rgba(255, 255, 255, 0.92);
+            color: #1e293b;
+            border-color: rgba(0, 0, 0, 0.12);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+        }
+        .emoji-picker-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+        }
+        .emoji-picker-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .emoji-picker-sub {
+            font-size: 0.72rem;
+            opacity: 0.65;
+        }
+        .emoji-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            box-sizing: border-box;
+        }
         .emoji-pick-btn {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: transparent;
-            border-radius: 9px;
-            font-size: 1.35rem;
-            line-height: 1;
+            width: 36px;
+            height: 36px;
+            border: 1px solid transparent;
+            background: rgba(128, 128, 128, 0.1);
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.15s, background 0.15s, filter 0.15s;
-            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25));
+            transition: all 0.15s ease;
+            color: inherit;
         }
-        .emoji-pick-btn:hover { transform: scale(1.28); background: rgba(128,128,128,0.25); filter: drop-shadow(0 2px 3px rgba(0,0,0,0.35)); }
+        .emoji-pick-btn:hover {
+            transform: scale(1.15);
+            background: rgba(128, 128, 128, 0.28);
+            border-color: var(--primary-accent);
+        }
+        .line-icon-svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.9;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .task-line-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 6px;
+            flex-shrink: 0;
+            color: currentColor;
+        }
+        .task-line-icon .line-icon-svg {
+            width: 18px;
+            height: 18px;
+        }
         .emoji-pick-clear {
-            grid-column: 1 / -1;
-            margin-top: 6px;
-            padding: 6px;
+            margin-top: 8px;
+            padding: 7px;
             border-radius: 8px;
-            border: 1px dashed rgba(128,128,128,0.4);
+            border: 1px dashed rgba(128, 128, 128, 0.35);
             background: transparent;
             color: inherit;
             font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.15s;
         }
-        .emoji-pick-clear:hover { background: rgba(128,128,128,0.2); }
+        .emoji-pick-clear:hover {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border-color: #ef4444;
+        }
 
         .subtasks-container { 
             margin-top: 8px; 
@@ -2392,6 +2457,262 @@
         width: 180px;
     }
 }
+
+/* ===== MASAÜSTÜ KLASÖRLERİ SİSTEMİ (DESKTOP FOLDERS) ===== */
+.desktop-folders-container {
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+body.light-mode .desktop-folders-container {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .desktop-folders-container {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.desktop-folders-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    gap: 12px;
+}
+
+.desktop-folders-title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: inherit;
+    letter-spacing: 0.2px;
+}
+
+.folders-count-badge {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    font-weight: normal;
+}
+
+.btn-create-folder-inline {
+    background: transparent;
+    border: 1px dashed var(--primary-accent);
+    color: var(--primary-accent);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-create-folder-inline:hover {
+    background: var(--primary-accent);
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+    transform: translateY(-1px);
+}
+
+.desktop-folders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 14px;
+}
+
+.empty-folders-hint {
+    grid-column: 1 / -1;
+    padding: 18px;
+    text-align: center;
+    font-size: 0.86rem;
+    color: inherit;
+    opacity: 0.7;
+    background: rgba(128, 128, 128, 0.05);
+    border: 1px dashed var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.empty-folders-hint:hover {
+    opacity: 1;
+    border-color: var(--primary-accent);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+/* Klasör Kartı */
+.desktop-folder-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 14px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.desktop-folder-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-accent);
+}
+
+.desktop-folder-card.drag-hover {
+    border-color: #3b82f6 !important;
+    background: rgba(59, 130, 246, 0.12) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+    transform: scale(1.04);
+}
+
+.folder-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+
+.folder-card-icon {
+    display: flex;
+    align-items: center;
+    color: #f59e0b; /* Sıcak Klasör Sarısı */
+}
+
+.folder-svg-icon {
+    width: 26px;
+    height: 26px;
+    fill: currentColor;
+    stroke: none;
+}
+
+.folder-card-menu-btn {
+    background: transparent;
+    border: none;
+    color: inherit;
+    opacity: 0.45;
+    padding: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+.folder-card-menu-btn:hover {
+    opacity: 1;
+    background: rgba(128, 128, 128, 0.15);
+}
+
+.folder-card-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+}
+
+.folder-card-count {
+    font-size: 0.76rem;
+    opacity: 0.65;
+    color: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Ana Ekrandaki Dosyalar Başlığı */
+.desktop-files-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 12px 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.desktop-files-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.85;
+}
+
+/* Breadcrumb İçi Klasör Eylem Butonları */
+.breadcrumb-folder-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    flex-wrap: wrap;
+}
+
+.btn-breadcrumb-action {
+    background: rgba(128, 128, 128, 0.1);
+    border: 1px solid var(--border-color);
+    color: inherit;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s ease;
+}
+
+.btn-breadcrumb-action:hover {
+    background: rgba(128, 128, 128, 0.2);
+    border-color: var(--primary-accent);
+}
+
+.btn-breadcrumb-action.danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+/* Menü İç Başlıkları */
+.card-menu-header-label {
+    padding: 6px 10px 4px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.6;
+}
+
+/* Header Dışa Aktar Butonları */
+.export-dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
 
 
 

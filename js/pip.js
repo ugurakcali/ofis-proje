@@ -617,6 +617,7 @@
                             </button>
                         </div>
                         <input type="checkbox" class="pip-task-checkbox" ${task.completed ? 'checked' : ''} data-tidx="${index}">
+                        ${task.emoji ? renderTaskIcon(task.emoji) : ''}
                         <span class="pip-task-text ${task.completed ? 'completed' : ''}" data-hl-target="true" data-hl-type="task" data-hl-task-idx="${index}" title="Çift tıklayarak düzenleyin">${task.text}</span>
                         
                         <button class="btn-task-action" data-pip-add-sub="${index}" style="padding:3px;" title="Alt Görev Ekle">

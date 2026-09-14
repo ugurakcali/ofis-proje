@@ -23,6 +23,12 @@
 
 let projects = [];
 let officeNotes = [];
+let customFolders = [];
+try {
+    const storedFolders = localStorage.getItem('mimzCustomFolders');
+    if (storedFolders) customFolders = JSON.parse(storedFolders);
+} catch (e) { customFolders = []; }
+if (!Array.isArray(customFolders)) customFolders = [];
 
 /* ===== RUHSAT & İMAR FÖYÜ STANDART ŞABLONU (12 BÖLÜM & 131 KRİTER) ===== */
 var RUHSAT_DEFAULT_TEMPLATE = {
@@ -553,4 +559,185 @@ function saveProjects() {
 function saveOfficeNotes() {
     localStorage.setItem('mimzOfficeNotes', JSON.stringify(officeNotes));
     if (typeof notifyServerStateChange === 'function') notifyServerStateChange();
+}
+
+function saveCustomFolders() {
+    localStorage.setItem('mimzCustomFolders', JSON.stringify(customFolders));
+    if (typeof notifyServerStateChange === 'function') notifyServerStateChange();
+}
+
+function escapeHtml(text) {
+    if (text === null || text === undefined) return '';
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function getAllKnownFolders() {
+    const set = new Set();
+    (customFolders || []).forEach(f => {
+        const tr = (f || '').trim();
+        if (tr && tr !== 'Ana Ekran') set.add(tr);
+    });
+    (projects || []).forEach(p => {
+        const f = (p.folder || '').trim();
+        if (f && f !== 'Ana Ekran') set.add(f);
+    });
+    (officeNotes || []).forEach(n => {
+        const f = (n.folder || '').trim();
+        if (f && f !== 'Ana Ekran') set.add(f);
+    });
+    return Array.from(set).sort((a, b) => a.localeCompare(b, 'tr'));
+}
+
+function createCustomFolder(name) {
+    const tr = (name || '').trim();
+    if (!tr || tr === 'Ana Ekran') {
+        showToast('Geçerli bir klasör adı girin.', 'info');
+        return false;
+    }
+    if (!customFolders.includes(tr)) {
+        customFolders.push(tr);
+        saveCustomFolders();
+    }
+    showToast(`"${tr}" klasörü oluşturuldu.`);
+    if (typeof renderProjects === 'function') renderProjects();
+    if (typeof renderOfficeNotes === 'function') renderOfficeNotes();
+    return true;
+}
+
+function renameCustomFolder(oldName, newName) {
+    const oldTr = (oldName || '').trim();
+    const newTr = (newName || '').trim();
+    if (!oldTr || !newTr || oldTr === newTr) return false;
+    if (newTr === 'Ana Ekran') {
+        showToast('Klasör adı "Ana Ekran" olamaz.', 'info');
+        return false;
+    }
+
+    // customFolders güncelle
+    const idx = customFolders.indexOf(oldTr);
+    if (idx !== -1) {
+        customFolders[idx] = newTr;
+    } else {
+        customFolders.push(newTr);
+    }
+    saveCustomFolders();
+
+    // Projeleri güncelle
+    let projChanged = false;
+    projects.forEach(p => {
+        if ((p.folder || '').trim() === oldTr) {
+            p.folder = newTr;
+            projChanged = true;
+        }
+    });
+    if (projChanged) saveProjects();
+
+    // Notları güncelle
+    let noteChanged = false;
+    officeNotes.forEach(n => {
+        if ((n.folder || '').trim() === oldTr) {
+            n.folder = newTr;
+            noteChanged = true;
+        }
+    });
+    if (noteChanged) saveOfficeNotes();
+
+    if (currentViewFolder === oldTr) {
+        currentViewFolder = newTr;
+    }
+
+    showToast(`Klasör "${newTr}" olarak güncellendi.`);
+    if (typeof renderProjects === 'function') renderProjects();
+    if (typeof renderOfficeNotes === 'function') renderOfficeNotes();
+    return true;
+}
+
+function deleteCustomFolder(name, moveFilesToHome = true) {
+    const tr = (name || '').trim();
+    if (!tr || tr === 'Ana Ekran') return;
+
+    customFolders = customFolders.filter(f => f !== tr);
+    saveCustomFolders();
+
+    if (moveFilesToHome) {
+        let projChanged = false;
+        projects.forEach(p => {
+            if ((p.folder || '').trim() === tr) {
+                p.folder = 'Ana Ekran';
+                projChanged = true;
+            }
+        });
+        if (projChanged) saveProjects();
+
+        let noteChanged = false;
+        officeNotes.forEach(n => {
+            if ((n.folder || '').trim() === tr) {
+                n.folder = 'Ana Ekran';
+                noteChanged = true;
+            }
+        });
+        if (noteChanged) saveOfficeNotes();
+    }
+
+    if (currentViewFolder === tr) {
+        currentViewFolder = null;
+    }
+
+    showToast(`"${tr}" klasörü silindi.`);
+    if (typeof renderProjects === 'function') renderProjects();
+    if (typeof renderOfficeNotes === 'function') renderOfficeNotes();
+}
+
+/* ===== SİYAH-BEYAZ ÇİZGİSEL İKONLAR (36 ADET TEKNİK/MİMARİ VE İŞ İKONU) ===== */
+var LINE_ICONS = (typeof window !== 'undefined' ? window : global).LINE_ICONS = {
+    "check": { label: "Onay / Tamam", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' },
+    "x": { label: "İptal / Çarpı", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' },
+    "star": { label: "Yıldız / Önemli", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' },
+    "heart": { label: "Favori", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>' },
+    "pin": { label: "İğne / Sabit", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1v3.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/></svg>' },
+    "alert": { label: "Dikkat / Uyarı", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' },
+    "flag": { label: "Bayrak / Öncelik", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>' },
+    "bulb": { label: "Fikir / Tasarım", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>' },
+    "target": { label: "Hedef", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>' },
+    "building": { label: "Bina / Mimari", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/></svg>' },
+    "home": { label: "Konut / Ev", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>' },
+    "ruler": { label: "Cetvel / Gönye", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="m21.7 8.3-6-6a1 1 0 0 0-1.4 0l-12 12a1 1 0 0 0 0 1.4l6 6a1 1 0 0 0 1.4 0l12-12a1 1 0 0 0 0-1.4Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/></svg>' },
+    "compass": { label: "Pusula / Açı", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>' },
+    "hammer": { label: "Çekiç / İnşaat", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0-.83-.83-.83-2.17 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 3.26-1.25-1.25a2 2 0 0 0-2.83 0l-1.8 1.8 4.07 4.08 1.81-1.8a2 2 0 0 0 0-2.83Z"/></svg>' },
+    "wrench": { label: "Uygulama / Ayar", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>' },
+    "calendar": { label: "Takvim / Randevu", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' },
+    "clock": { label: "Saat / Süre", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+    "file": { label: "Belge / Pafta", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>' },
+    "file-check": { label: "Onaylı Evrak", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></svg>' },
+    "folder": { label: "Klasör / Dosya", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>' },
+    "layers": { label: "Katmanlar / Paftalar", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>' },
+    "box": { label: "Parsel / Kutu", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>' },
+    "map-pin": { label: "Ada / Parsel / Konum", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>' },
+    "phone": { label: "Telefon / İletişim", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>' },
+    "mail": { label: "Yazışma / E-posta", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>' },
+    "user": { label: "Mimar / Müşteri", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+    "users": { label: "Ekip / İdare", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+    "cash": { label: "Hakediş / Maliyet", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>' },
+    "tag": { label: "Etiket", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="m20.59 13.41-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>' },
+    "camera": { label: "Şantiye Fotoğrafı", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>' },
+    "lock": { label: "Resmi / Kilitli", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' },
+    "eye": { label: "Kontrol / İnceleme", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>' },
+    "zap": { label: "Acil / Şimşek", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' },
+    "smile": { label: "Olumlu", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>' },
+    "meh": { label: "Nötr", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>' },
+    "frown": { label: "Eksik / Sorun", svg: '<svg class="line-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>' }
+};
+
+function renderTaskIcon(iconKey) {
+    if (!iconKey) return '';
+    if (LINE_ICONS[iconKey]) {
+        return `<span class="task-line-icon" title="${LINE_ICONS[iconKey].label}">${LINE_ICONS[iconKey].svg}</span>`;
+    }
+    // Geriye dönük emoji uyumluluğu
+    return `<span class="task-emoji-tag">${escapeHtml(iconKey)}</span>`;
 }

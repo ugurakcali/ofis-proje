@@ -32,6 +32,8 @@
             visibleNotes.forEach(note => {
                 const card = document.createElement('div');
                 card.className = 'note-card glitter-frame';
+                card.draggable = true;
+                card.ondragstart = (e) => handleNoteDragStart(e, note.id);
                 if (note.color) card.style.backgroundColor = note.color;
 
                 card.onclick = (e) => {
